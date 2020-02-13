@@ -1,0 +1,126 @@
+'********** Default value'
+SET battery to operational
+SET number_of_column to 3
+SET number_of_elevator to 3
+SET number_of_floor to 66
+SET ElevatorStatus to idle
+SET floorUser to 1
+SET floorElevator to 1
+SET waitList to EMPTY
+
+'********** column section **********'
+
+SEQUENCE 
+    IF button_in_floor_choice 
+END SEQUENCE
+
+'********** button section **********'
+
+SEQUENCE button_out_down
+    call findElevator
+    call moveElevator
+    SET directionUser to direction_down
+END SEQUENCE
+
+SEQUENCE button_out_up
+    call findElevator
+    call moveElevator
+    SET directionUser to direction_up
+END SEQUENCE
+
+SEQUENCE button_in_door_open
+    call door_open
+END SEQUENCE
+
+SEQUENCE button_in_door_close
+    call door_close
+END SEQUENCE
+
+SEQUENCE button_in_floor_choice
+    call moveElevator WITH button_in_floor_choice
+END SEQUENCE
+
+'********** door section **********'
+
+SEQUENCE door_open
+    call door_open WITH Elevator
+END SEQUENCE
+
+SEQUENCE door_close
+    call door_close WITH Elevator
+END SEQUENCE
+
+SEQUENCE weight_limit
+    If READ weight > weight_limit
+        THEN door_open
+    ELSE wait
+    END IF
+END SEQUENCE
+
+SEQUENCE door_obstruct
+    IF READ door_sensor = TRUE
+        THEN call door_wait
+    END IF
+END SEQUENCE    
+'********** move section **********'
+
+SEQUENCE waitList
+    FOR EACH floorUser IN waitList
+        call findElevator WITH floorUser
+        wait 5 seconds
+        return Elevator
+END SEQUENCE
+
+SEQUENCE directionUser
+    IF floorElevator < floorUser
+        SET directionUser to direction_down
+    ELSE
+        SET directionUser to direction_up
+    Return directionUser
+END SEQUENCE
+
+SEQUENCE directionElevator
+    IF floorElevator < floorUser
+        SET directionElevator to direction_up
+    ELSE
+        SET directionElevator to direction_down
+    Return directionElevator
+END SEQUENCE
+
+SEQUENCE moveElevator
+    If floorUser != floorElevator
+        THEN move Elevator TO floorUser
+        THEN call door_open
+END SEQUENCE
+
+SEQUENCE findElevator USING Floor AND Direction
+    For each elevator in elevatorList
+        If floorUser EQUAL floorElevator AND ElevatorStatus IS stop 
+        THEN return Elevator
+        If floorUser EQUAL floorElevator AND ElevatorStatus IS idle AND directionUser EQUAL directionElevator
+        THEN return Elevator
+        IF ELSE floorUser EQUAL floorElevator AND ElevatorStatus IS MOVING AND directionUser EQUAL directionElevator
+        THEN return Elevator
+        IF ELSE directionUser AND directionElevator EQUAL direction_down AND floorElevator > floorUser
+        THEN return Elevator
+        IF ELSE directionUser AND directionElevator EQUAL direction_up AND floorElevator < floorUser
+        THEN return Elevator
+        IF ELSE call nearElevator USING Floor AND Direction
+        THEN return Elevator
+        END IF
+    END For
+END SEQUENCE
+
+SEQUENCE distance WITH floorElevator AND floorUser
+    COMPUTE floorUser MINUS floorElevator
+    return distance
+END SEQUENCE
+
+SEQUENCE nearElevator USING floorUser AND floorElevator
+    For each elevator in elevatorList
+        IF directionElevator EQUAL directionUser
+            COMPUTE distance AS EQUAL TO ABSOLUTE VALUE OF floorElevator MINUS floorUser
+            return elevator WITH smallest distance
+        ELSE directionElevator !EQUAL directionUser
+            SET floorUser to waitList
+END SEQUENCE
