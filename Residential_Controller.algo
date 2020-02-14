@@ -3,10 +3,10 @@
 SET ElevatorStatus to idle
 SET floorUser to 1
 SET floorElevator to 1
-SET waitList to EMPTY
-SET number of column to 1
-SET number of elevator to 2
+SET total_column to 1
+SET total_elevator to 2
 SET distanceSmallest to 0
+SET total_floor to 10
 
 '********** misc section **********'
 
@@ -18,28 +18,28 @@ END SEQUENCE
 
 '********** button section **********'
 
-SEQUENCE button_out_down
+SEQUENCE button_down
     SET directionUser to direction_down
     call findElevator
     call moveElevator
 END SEQUENCE
 
-SEQUENCE button_out_up
+SEQUENCE button_up
     SET directionUser to direction_up
     call findElevator
     call moveElevator
 END SEQUENCE
 
-SEQUENCE button_in_door_open
+SEQUENCE button_door_open
     call door_open
 END SEQUENCE
 
-SEQUENCE button_in_door_close
+SEQUENCE button_door_close
     call door_close
 END SEQUENCE
 
-SEQUENCE button_in_floor_choice
-    call moveElevator WITH button_in_floor_choice
+SEQUENCE floor_choice
+    call moveElevator WITH floor_choice
 END SEQUENCE
 
 '********** door section **********'
@@ -66,19 +66,16 @@ SEQUENCE door_obstruct
 END SEQUENCE    
 '********** move section **********'
 
-SEQUENCE waitList
-    FOR EACH floorUser IN waitList
-        call findElevator WITH floorUser
-        wait 5 seconds
-        return Elevator
-END SEQUENCE
-
 SEQUENCE directionUser
-    IF floorElevator < floorUser
-        SET directionUser to direction_down
+    IF floor_choice < floorUser
+    SET directionUser EQUAL direction_down
+    
+    ELSE IF floor_choice > floorUser
+    SET directionUser EQUAL direction_up
+
     ELSE
-        SET directionUser to direction_up
-    Return directionUser
+    SET directionUser to
+    Return directionUser EQUAL direction
 END SEQUENCE
 
 SEQUENCE directionElevator
@@ -99,22 +96,36 @@ SEQUENCE findElevator USING floorUser AND directionUser
     For each elevator
         If floorUser EQUAL floorElevator AND ElevatorStatus IS stop AND directionUser EQUAL directionElevator
         THEN return Elevator
+        
         If floorUser EQUAL floorElevator AND ElevatorStatus IS idle AND directionUser EQUAL directionElevator
         THEN return Elevator
-        IF ELSE floorUser EQUAL floorElevator AND ElevatorStatus IS MOVING AND directionUser EQUAL directionElevator
-        THEN return Elevator
-        IF ELSE directionUser EQUAL direction_down AND directionElevator EQUAL direction_down AND floorElevator > floorUser
-        THEN return Elevator
-        IF ELSE directionUser EQUAL direction_up AND directionElevator EQUAL direction_up AND floorElevator < floorUser
-        THEN return Elevator
-        IF ELSE call nearElevator USING floorUser AND floorElevator
-        THEN return Elevator
+        
+        IF directionUser EQUAL direction_down AND directionElevator EQUAL direction_down AND floorElevator > floorUser
+        THEN call findNearElevator WITH floorUser AND floorElevator
+        return nearElevator
+        
+        IF directionUser EQUAL direction_up AND directionElevator EQUAL direction_up AND floorElevator < floorUser
+        THEN call findNearElevator WITH floorUser AND floorElevator
+        return nearElevator
+                
+        IF ELSE ElevatorStatus is idle
+        THEN return elevator
+        
         END IF
     END For
 END SEQUENCE
 
-SEQUENCE nearElevator USING floorUser AND floorElevator
-    For each elevator
-        COMPUTE distance AS EQUAL TO ABSOLUTE VALUE OF floorElevator MINUS floorUser
-        return elevator WITH smallest distance
+SEQUENCE findNearElevator USING floorUser AND floorElevator AND directionUser
+        COMPUTE distance EQUAL TO ABSOLUTE VALUE OF floorElevator MINUS floorUser
+        SET smallestDistance to distance
+
+        FOR EACH elevator
+            IF directionElevator = directionUser
+            COMPUTE distance EQUAL TO ABSOLUTE VALUE OF floorElevator MINUS floorUser
+                IF distance < smallestDistance
+                    SET distance to smallestDistance
+                END IF
+            END IF
+        END FOR
+        return smallestDistance
 END SEQUENCE
