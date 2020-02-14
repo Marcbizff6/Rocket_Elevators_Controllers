@@ -127,3 +127,17 @@ SEQUENCE findNearElevator USING floorUser AND floorElevator AND directionUser
         END FOR
         return smallestDistance
 END SEQUENCE
+
+SEQUENCE elevatorOrigin
+    FOR EACH column in columnList
+        FOR EACH elevator
+            IF elevatorfloor EQUAL RC
+            return
+
+            IF elevatorfloor !EQUAL RC
+            moveElevator to RC
+            return
+        FOR END
+    FOR END    
+END SEQUENCE
+
