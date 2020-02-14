@@ -2,7 +2,7 @@
 
 SET batery to operational
 SET total_column to 4
-SET numberColumnBasement to 1
+SET number_Of_Column_For_Basement to 1
 SET ElevatorStatus to idle
 SET floorUser to 0
 SET floorElevator to 0
@@ -10,11 +10,11 @@ SET total_elevator to 12
 SET distanceSmallest to 0
 SET total_floor to 66
 SET total_basement : 6
-SET RC to 0
-SET basement1 to -1
-SET basement6 to -6
-SET numberOfFloorByColumn EQUAL
-    total_floor - total_basement DIVIDE BY total_column MINUS 1
+SET RC to total_basement PLUS 1
+SET number_Of_Floor_By_Column EQUAL
+    total_floor MINUS total_basement DIVIDE BY total_column MINUS 1
+SET weight to 0
+SET weight_limit to 1000
 
 '********** button section **********'
 SEQUENCE button_down
@@ -44,23 +44,22 @@ END SEQUENCE
 '********** door section **********'
 
 SEQUENCE door_open
-    call door_open WITH Elevator
+        call door_open WITH Elevator
 END SEQUENCE
 
-SEQUENCE door_close
+SEQUENCE weight
+    READ balance
+    return balance to weight
+END SEQUENCE
+
+SEQUENCE door_close WITH weight AND door_obstruct
+    IF weight > weight_limit AND door_obstruct EQUAL FALSE
     call door_close WITH Elevator
 END SEQUENCE
 
-SEQUENCE weight_limit
-    If READ weight > weight_limit
-        THEN door_open
-    ELSE wait
-    END IF
-END SEQUENCE
-
 SEQUENCE door_obstruct
-    IF READ door_sensor = TRUE
-        THEN call door_wait
+    IF READ door_sensor EQUAL TRUE
+        THEN call door_open
     END IF
 END SEQUENCE    
 '********** move section **********'
@@ -78,15 +77,20 @@ SEQUENCE directionUser
 END SEQUENCE
 
 SEQUENCE directionElevator
-    IF floor_choice < floorElevator
-        SET directionElevator to direction_up
-    ELSE IF floor_choice > floorElevator
-        SET directionElevator to direction_down
-    Return directionElevator
+    IF floor_choice < directionElevator
+    SET directionUser EQUAL direction_down
+    
+    ELSE IF floor_choice > directionElevator
+    SET directionUser EQUAL direction_up
+
+    ELSE
+    SET directionUser to
+    Return directionUser EQUAL direction
 END SEQUENCE
 
 SEQUENCE moveElevator
     If floor_choice != floorElevator
+        call door_close
         THEN move Elevator TO floor_choice
         THEN call door_open
 END SEQUENCE
@@ -123,7 +127,7 @@ SEQUENCE findNearElevator USING floorUser AND floorElevator AND directionUser
                 IF distance < smallestDistance
                     SET distance to smallestDistance
                 END IF
-            END IF
+            END IF  
         END FOR
         return smallestDistance
 END SEQUENCE
