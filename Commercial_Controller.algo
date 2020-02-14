@@ -53,7 +53,7 @@ SEQUENCE weight
 END SEQUENCE
 
 SEQUENCE door_close WITH weight AND door_obstruct
-    IF weight > weight_limit AND door_obstruct EQUAL FALSE
+    IF weight < weight_limit AND door_obstruct EQUAL FALSE
     call door_close WITH Elevator
 END SEQUENCE
 
