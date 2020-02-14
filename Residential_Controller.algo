@@ -48,22 +48,22 @@ SEQUENCE door_open
     call door_open WITH Elevator
 END SEQUENCE
 
-SEQUENCE door_close
+SEQUENCE weight
+    READ balance
+    return balance to weight
+END SEQUENCE
+
+SEQUENCE door_close WITH weight AND door_obstruct
+    IF weight < weight_limit AND door_obstruct EQUAL FALSE
     call door_close WITH Elevator
 END SEQUENCE
 
-SEQUENCE weight_limit
-    If READ weight > weight_limit
-        THEN door_open
-    ELSE wait
+SEQUENCE door_obstruct
+    IF READ door_sensor EQUAL TRUE
+        THEN call door_open
     END IF
 END SEQUENCE
 
-SEQUENCE door_obstruct
-    IF READ door_sensor = TRUE
-        THEN call door_wait
-    END IF
-END SEQUENCE    
 '********** move section **********'
 
 SEQUENCE directionUser
@@ -79,16 +79,21 @@ SEQUENCE directionUser
 END SEQUENCE
 
 SEQUENCE directionElevator
-    IF floorElevator < floorUser
-        SET directionElevator to direction_up
-    ELSE IF floorElevator > floorUser
-        SET directionElevator to direction_down
-    Return directionElevator
+    IF floor_choice < directionElevator
+    SET directionUser EQUAL direction_down
+    
+    ELSE IF floor_choice > directionElevator
+    SET directionUser EQUAL direction_up
+
+    ELSE
+    SET directionUser to
+    Return directionUser EQUAL direction
 END SEQUENCE
 
 SEQUENCE moveElevator
-    If floorUser != floorElevator
-        THEN move Elevator TO floorUser
+    If floor_choice != floorElevator
+        call door_close
+        THEN move Elevator TO floor_choice
         THEN call door_open
 END SEQUENCE
 

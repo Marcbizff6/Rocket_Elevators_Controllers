@@ -44,7 +44,7 @@ END SEQUENCE
 '********** door section **********'
 
 SEQUENCE door_open
-        call door_open WITH Elevator
+    call door_open WITH Elevator
 END SEQUENCE
 
 SEQUENCE weight
@@ -61,7 +61,7 @@ SEQUENCE door_obstruct
     IF READ door_sensor EQUAL TRUE
         THEN call door_open
     END IF
-END SEQUENCE    
+END SEQUENCE
 '********** move section **********'
 
 SEQUENCE directionUser
