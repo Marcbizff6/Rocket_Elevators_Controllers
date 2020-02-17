@@ -1,3 +1,5 @@
+import time
+import datetime
 import mymodule1
 import mymodule2 as qwer
 import platform
