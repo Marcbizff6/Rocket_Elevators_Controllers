@@ -32,7 +32,7 @@ addFloorList();
 
 let moveElevator = function (){
     if (userFloor === elevatorFloor)
-        elevatorFloor +=11
+        elevatorFloor += 11
         console.log("elevatorFloor : " + elevatorFloor);
 }
 
