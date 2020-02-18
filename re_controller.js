@@ -37,3 +37,34 @@ let moveElevator = function (){
 }
 
 moveElevator();
+
+
+
+class Column {
+    constructor(totalFloor, nbElevator) {
+       this.totalFloor = totalFloor;
+       this.nbElevator = nbElevator;
+       this.elevatorList = [];
+       for(var i = 0; i<nbElevator; i=i+1) {
+           
+           this.elevatorList.push(new Elevator(totalFloor, nbElevator));
+    }       
+    }
+}
+
+class Elevator {
+    constructor(firstFloor, lastFloor) {
+       this.firstFloor = firstFloor;
+       this.lastFloor = lastFloor;
+        this.floorList
+       for(var i = 0; i < lastFloor; i++ ) {
+           
+        this.elevatorList.push(new Elevator(totalFloor, nbElevator));
+ }       
+
+    }
+}
+
+
+const Column1 = new Column (10, 2);
+console.log(Column1)
