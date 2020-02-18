@@ -1,70 +1,47 @@
+class Column {
+    constructor(id, nbFloors) {
+        this.id = id;
+        this.elevatorList = [];
+        this.floorList = [];
+        this.callButtonList= [];
+        
+        for (var i = 1; i <= nbFloors; i++) {
+            if (i != 1) {
+                var callButton = new CallButton ("down", i)
+                    this.callButtonList.push(callButton)
+                }
+            if (i != nbFloors){
+                var callButton = new CallButton ("up", i)
+                    this.callButtonList.push(callButton)
+                }
+                }
 
-// Variables : elevators related
-let elevator = [];
-let totalElevator = 2;
-
-//Variables : floors related
-let firstFloor = 1;
-let lastFloor = 10;
-let floorTotal = lastFloor - firstFloor + 1;
-let floorList = [];
-
-// Variables : position
-let userFloor = 0;
-let elevatorFloor = 0;
-
-// Variables : directions
-
-// Functions
-
-// Function to push the number of floor in the array
-let addFloorList = function () {
-    for (i = firstFloor; i < (lastFloor+1); i++)
-    floorList.push(i);
-    //Show the elevator array in the console
-    console.log("floorTotal : " + floorTotal)
-    console.log("floorList : " + floorList)
-};
-
-// Push the function to the array
-addFloorList();
-
-
-let moveElevator = function (){
-    if (userFloor === elevatorFloor)
-        elevatorFloor += 11
-        console.log("elevatorFloor : " + elevatorFloor);
+    }
 }
 
-moveElevator();
-
-
-
-class Column {
-    constructor(totalFloor, nbElevator) {
-       this.totalFloor = totalFloor;
-       this.nbElevator = nbElevator;
-       this.elevatorList = [];
-       for(var i = 0; i<nbElevator; i=i+1) {
-           
-           this.elevatorList.push(new Elevator(totalFloor, nbElevator));
-    }       
+class CallButton {
+    constructor(direction, floor){
+        this.direction = direction;
+        this.floor = floor;
+        this.light = "off"
     }
 }
 
 class Elevator {
-    constructor(firstFloor, lastFloor) {
-       this.firstFloor = firstFloor;
-       this.lastFloor = lastFloor;
-        this.floorList
-       for(var i = 0; i < lastFloor; i++ ) {
-           
-        this.elevatorList.push(new Elevator(totalFloor, nbElevator));
- }       
-
-    }
+    constructor(id, nbFloors) {
+        this.id = id;
+        this.floorRequestedButton = [];
+        this.doors = "closed"
+        this.direction = "idle"
+        this.currentFloor = 1;
+        this.requestList = [];
+        }
 }
 
+var Column1 = new Column (1, 10);
 
-const Column1 = new Column (10, 2);
+var Column2 = new Column (1, 10);
+var Elevator1 = new Elevator(10,20)
 console.log(Column1)
+console.log()
+console.log(Elevator1)
