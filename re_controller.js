@@ -8,11 +8,11 @@ class Column {
         
         for (var i = 1; i <= nbFloors; i++) {
             if (i != 1) {
-                var callButton = new CallButton ("down", i)
+                var callButton = new CallButtonClass ("down", i)
                     this.callButtonList.push(callButton)
                 }
             if (i != nbFloors){
-                var callButton = new CallButton ("up", i)
+                var callButton = new CallButtonClass ("up", i)
                     this.callButtonList.push(callButton)
                 }
             }
@@ -24,7 +24,7 @@ class Column {
     }
 }
 
-class CallButton {
+class CallButtonClass {
     constructor(direction, floor){
         this.direction = direction;
         this.floor = floor;
@@ -32,7 +32,7 @@ class CallButton {
     }
 }
 
-class FloorButton {
+class FloorButtonClass {
     constructor(id, floor){
         this.id = id;
         this.floor = floor;
@@ -49,15 +49,15 @@ class Elevator {
         this.currentFloor = 1;
         this.requestList = [];
 
-        for (var i = 1; i <= floorRequestedButton; i++){
-                this.floorRequestedButton.push(i)
 
-        }
+        for (var i = 1; i <= floorRequestedButton; i++) {
+            var FloorButton = new FloorButtonClass (i, i)
+                this.floorRequestedButton.push(FloorButton)
+            }
+
     }
 }
 
 var Column1 = new Column (1, 2, 10);
-var Column2 = new Column (2, 3, 4);
 
 console.log(Column1)
-console.log(Column2)
