@@ -1,6 +1,7 @@
 class Column {
-    constructor(id, nbFloors) {
+    constructor(id, nbElevator,nbFloors) {
         this.id = id;
+        this.nbElevator = nbElevator
         this.elevatorList = [];
         this.floorList = [];
         this.callButtonList= [];
@@ -14,8 +15,12 @@ class Column {
                 var callButton = new CallButton ("up", i)
                     this.callButtonList.push(callButton)
                 }
-                }
+            }
 
+            for (var i = 0; i < nbElevator; i++){
+                var elevator = new Elevator (i, nbFloors)
+                    this.elevatorList.push(elevator)
+            }
     }
 }
 
@@ -27,21 +32,32 @@ class CallButton {
     }
 }
 
+class FloorButton {
+    constructor(id, floor){
+        this.id = id;
+        this.floor = floor;
+        this.light = "off"
+    }
+}
+
 class Elevator {
-    constructor(id, nbFloors) {
+    constructor(id, floorRequestedButton) {
         this.id = id;
         this.floorRequestedButton = [];
         this.doors = "closed"
         this.direction = "idle"
         this.currentFloor = 1;
         this.requestList = [];
+
+        for (var i = 1; i <= floorRequestedButton; i++){
+                this.floorRequestedButton.push(i)
+
         }
+    }
 }
 
-var Column1 = new Column (1, 10);
+var Column1 = new Column (1, 2, 10);
+var Column2 = new Column (2, 3, 4);
 
-var Column2 = new Column (1, 10);
-var Elevator1 = new Elevator(10,20)
 console.log(Column1)
-console.log()
-console.log(Elevator1)
+console.log(Column2)
