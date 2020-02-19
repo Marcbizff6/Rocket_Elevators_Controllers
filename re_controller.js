@@ -40,31 +40,31 @@ class Elevator {
         this.floorRequestedButton = [];
         this.doors = "closed"
         this.direction = "idle"
-        this.currentFloor = 1;
+        this.currentFloor = 22;
         this.requestList = [];
     }
-        moveElevator(){
-            console.log("moving elevator")
-            if (this.currentFloor < Column1.callButtonList[0].floor){
-                this.currentFloor ++
-                console.log("move up one floor")
-                console.log("this.currentFloor : ", this.currentFloor)
+        moveElevator(floorChoice){
+            var x = Math.abs(this.currentFloor - floorChoice)
+            for (var i = 0; i < x; i++){
+                if (this.currentFloor < floorChoice){
+                    console.log("this.current : ", this.currentFloor)
+                    console.log("UP TO THIS floorChoice : ", floorChoice)   
+                    this.currentFloor ++
+                    console.log("move up one floor to : ", this.currentFloor)
+                    console.log("\n")
+                }
             }
-            if (this.currentFloor > Column1.callButtonList[0].floor){
-                this.currentFloor --
-                console.log("move down one floor")
-                console.log("this.currentFloor : ", this.currentFloor)
-            }
-            if (this.currentFloor = Column1.callButtonList[0].floor){
-                console.log("No move #1")
-                console.log("this.currentFloor : ", this.currentFloor)
-            }
-            else 
-                console.log("No move #2")
-                console.log("this.currentFloor : ", this.currentFloor)
-            
 
-        }
+            for (var i = 0; i <= x; i++){
+                if (this.currentFloor > floorChoice){
+                    console.log("this.current : ", this.currentFloor)
+                    console.log("DOWN TO THIS floorChoice : ", floorChoice)
+                    this.currentFloor --
+                    console.log("move up one floor to : ", this.currentFloor)
+                    console.log("\n")
+                }
+            }
+    }
 }
 
 // ------------- FUNCTION SECTION -------------
@@ -102,10 +102,10 @@ function displayCallButtonList(){
     }
 }
 
-// displayInfo() : Display all the info of displayFunction
+// displayInfo() : Display all the info of display functions
 function displayInfo(){
     displayElevatorInfo()
-    // displayColumnInfo()
+    displayColumnInfo()
     displayCallButtonList()
 }
 
@@ -125,4 +125,4 @@ var Column1 = new Column (1, 2, 10);
 
 // displayInfo()
 // callElevator()
-Column1.elevatorList[1].moveElevator()
+Column1.elevatorList[1].moveElevator(12)
