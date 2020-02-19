@@ -23,7 +23,21 @@ class Column {
                 var elevator = new Elevator (i, nbFloors)
                     this.elevatorList.push(elevator)
             }
-    }
+
+        }
+            RequestElevator(RequestedFloor, Direction){
+                var bestElevator = this.FindElevator(RequestedFloor, Direction)
+            }
+            
+            FindElevator(RequestedFloor, Direction){
+                console.log("RequestedFloor is " + RequestedFloor + " and Direction is " + Direction + "\n");
+                var scoreList = [];
+                console.log("Elevator " + Column1.elevatorList[0].id + " : " + "Floor " + Column1.elevatorList[0].currentFloor + " going " + Column1.elevatorList[0].direction);
+                var nearestElevator = Math.abs(Elevator.floor - RequestedFloor);
+
+            // MoveElevator(RequestedFloor, Direction){
+
+            }
 }
 
 class CallButtonClass {
@@ -40,27 +54,27 @@ class Elevator {
         this.floorRequestedButton = [];
         this.doors = "closed"
         this.direction = "idle"
-        this.currentFloor = 22;
+        this.currentFloor = 2;
         this.requestList = [];
     }
         moveElevator(floorChoice){
             var x = Math.abs(this.currentFloor - floorChoice)
             for (var i = 0; i < x; i++){
                 if (this.currentFloor < floorChoice){
-                    console.log("this.current : ", this.currentFloor)
-                    console.log("UP TO THIS floorChoice : ", floorChoice)   
+                    console.log("this floor : ", this.currentFloor)
                     this.currentFloor ++
-                    console.log("move up one floor to : ", this.currentFloor)
+                    console.log("move up to floor : ", this.currentFloor)
+                    console.log("up to this floor : ", floorChoice)   
                     console.log("\n")
                 }
             }
 
             for (var i = 0; i <= x; i++){
                 if (this.currentFloor > floorChoice){
-                    console.log("this.current : ", this.currentFloor)
-                    console.log("DOWN TO THIS floorChoice : ", floorChoice)
+                    console.log("this floor : ", this.currentFloor)
                     this.currentFloor --
-                    console.log("move up one floor to : ", this.currentFloor)
+                    console.log("move down to floor : ", this.currentFloor)
+                    console.log("down to this floor : ", floorChoice)
                     console.log("\n")
                 }
             }
@@ -112,7 +126,7 @@ function displayInfo(){
 // callElevator() : call the elevator when the callButton is activat
 function callElevator(){
     if (Column1.elevatorList[1].currentFloor == Column1.callButtonList[0].floor){
-        console.log("callElevator if statement")
+        console.log("callElevator if statement ")
     } else{
         console.log("callElevator else statement")
     } 
@@ -125,4 +139,8 @@ var Column1 = new Column (1, 2, 10);
 
 // displayInfo()
 // callElevator()
-Column1.elevatorList[1].moveElevator(12)
+Column1.elevatorList[0].currentFloor = 4;       Column1.elevatorList[0].direction = "UP";
+Column1.elevatorList[1].currentFloor = 2;       Column1.elevatorList[1].direction = "UP";
+
+Column1.RequestElevator(5, 'Down');
+// Column1.elevatorList[1].moveElevator(5)
