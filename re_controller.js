@@ -17,7 +17,7 @@ class Column {
                 }
             }
 
-            for (var i = 0; i < nbElevator; i++){
+            for (var i = 1; i <= nbElevator; i++){
                 var elevator = new Elevator (i, nbFloors)
                     this.elevatorList.push(elevator)
             }
@@ -32,13 +32,6 @@ class CallButtonClass {
     }
 }
 
-class FloorButtonClass {
-    constructor(id, floor){
-        this.id = id;
-        this.floor = floor;
-        this.light = "off"
-    }
-}
 
 class Elevator {
     constructor(id, floorRequestedButton) {
@@ -48,16 +41,15 @@ class Elevator {
         this.direction = "idle"
         this.currentFloor = 1;
         this.requestList = [];
-
-
-        for (var i = 1; i <= floorRequestedButton; i++) {
-            var FloorButton = new FloorButtonClass (i, i)
-                this.floorRequestedButton.push(FloorButton)
-            }
-
     }
 }
 
-var Column1 = new Column (1, 2, 10);
+function findElevator(){
+   console.log(Column1.elevatorList[1].id);
+}
 
+
+var Column1 = new Column (1, 2, 10);
 console.log(Column1)
+
+findElevator()
