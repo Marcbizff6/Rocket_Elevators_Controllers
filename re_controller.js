@@ -1,3 +1,6 @@
+const lineBreak = '     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
+let bestElevator = [];
+
 
 // ------------- CLASS SECTION -------------
 class Column {
@@ -17,52 +20,92 @@ class Column {
       }
     }
 
-    for (var i = 1; i <= nbElevator; i++) {
+    for (var i = 0; i < nbElevator; i++) {
       this.elevatorList.push(new Elevator(i, ""));
     }
 
   }
+
   requestElevator(requestedFloor, Direction) {
-    var bestElevator = this.findElevator(requestedFloor, Direction);
+    var thebestelevator = this.findElevator(requestedFloor, Direction);
+    console.log(thebestelevator)
+    console.log("\n")
+    thebestelevator.moveElevator(requestedFloor)
+    return thebestelevator
   }
 
   findElevator(requestedFloor, Direction) {
-    console.log("requestedFloor is " + requestedFloor + " and Direction is " + Direction);
-    let scoreList = [];
+
+    console.log(lineBreak);
+    console.log(`requestedFloor is ${requestedFloor}\nand direction is ${Direction}\n`);
+    console.log(`${lineBreak} \n`);
+
+    let scoreList = [9999];
+    let bestElevator = [9999];
+    let bestElevatorCurrentFloor = [9999];
+    let gap = [];
     this.elevatorList.forEach(Elevator => {
-      console.log("Elevator.id:" + Elevator.id + " Elevator.currentFloor:" + Elevator.currentFloor + " Elevator.direction:" + Elevator.direction)
+
       if (Elevator.currentFloor == requestedFloor && Elevator.direction == Direction) {
         Elevator.score = 1;
       }
-      else if (Elevator.currentFloor < requestedFloor && Elevator.direction == Direction) {
+      else if (Elevator.currentFloor != requestedFloor && Elevator.direction == Direction) {
         Elevator.score = 2;
       }
-      else if (Elevator.currentFloor > requestedFloor && Elevator.direction == Direction) {
+      else if (Elevator.direction == "idle") {
         Elevator.score = 3;
       }
-      else if (Elevator.direction == "idle") {
+      else if (Elevator.currentFloor == requestedFloor && Elevator.direction !== Direction) {
         Elevator.score = 4;
       }
-      else if (Elevator.currentFloor == requestedFloor && Elevator.direction !== Direction) {
+      else if (Elevator.currentFloor != requestedFloor && Elevator.direction !== Direction) {
         Elevator.score = 5;
       }
-      else if (Elevator.currentFloor < requestedFloor && Elevator.direction !== Direction) {
-        Elevator.score = 6;
-      }
-      else if (Elevator.currentFloor > requestedFloor && Elevator.direction !== Direction) {
-        Elevator.score = 7;
-      }
-      if (Elevator.score <= 99){
-      scoreList.push(Elevator.score, Elevator.id);
+
+      if (Elevator.score < scoreList[0]) {
+        scoreList.shift();
+        scoreList.push(Elevator.score);
+        console.log(`scoreList : ${scoreList}`)
+
+        bestElevator.shift();
+        bestElevator.push(Elevator.id);
+        // console.log(`bestElevator : ${bestElevator}`)
+
+        bestElevatorCurrentFloor.shift();
+        bestElevatorCurrentFloor.push(Elevator.currentFloor);
+        // console.log(`bestElevatorCurrentFloor : ${bestElevator}`)
+
+        gap.shift();
+        gap.push(Math.abs(Elevator.currentFloor - requestedFloor));
+
+        console.log(lineBreak);
+        console.log(`Elevator.id = ${Elevator.id};\nElevator.currentFloor = ${Elevator.currentFloor};\nElevator.direction = ${Elevator.direction};\nElevator.score = ${Elevator.score};\ngap = ${gap}\n`)
+        console.log(`${lineBreak} \n`);
+        return Elevator
+
+      } if (Elevator.score == scoreList[0])
+        gap.push(Math.abs(Elevator.currentFloor - requestedFloor));
+      // console.log(`gap : ${gap} \n`)
+      if (gap[0] > gap[1]) {
+        gap.shift();
+
+        bestElevator.shift();
+        bestElevator.push(Elevator.id);
+
+        console.log(lineBreak);
+        console.log(`Elevator.id = ${Elevator.id};\nElevator.currentFloor = ${Elevator.currentFloor};\nElevator.direction = ${Elevator.direction};\nElevator.score = ${Elevator.score};\ngap = ${gap}\n`)
+        console.log(`${lineBreak} \n`);
+        return Elevator
       }
     });
-    // scoreList.sort();
-    console.log(`scoreList: ${scoreList}`)
+    console.log(`Best Elevator ${bestElevator} \n`)
 
-    // MoveElevator(requestedFloor, Direction){
-    console.log(`Return this elevator: ${scoreList[0]}`)
-    console.log(`\n`)
-    return scoreList[0]
+    var chosenElevator = this.elevatorList.find(elevator => elevator.id == bestElevator[0])
+    return chosenElevator
+  }
+
+  requestFloor(elevator, requestedFloor) {
+    elevator.moveElevator(requestedFloor);
   }
 }
 
@@ -93,6 +136,7 @@ class Elevator {
         console.log("move up to floor : ", this.currentFloor)
         console.log("up to this floor : ", floorRequestedButton)
         console.log("\n")
+
       }
     }
 
@@ -105,6 +149,8 @@ class Elevator {
         console.log("\n")
       }
     }
+    console.log("door_open")
+    console.log("close_open \n")
   }
 }
 
@@ -151,49 +197,70 @@ function displayInfo() {
   // displayCallButtonList()
 }
 
-// callElevator() : call the elevator when the callButton is activat
-function callElevator() {
-  if (Column1.elevatorList[1].currentFloor == Column1.callButtonList[0].floor) {
-    console.log("callElevator if statement ")
-  } else {
-    console.log("callElevator else statement")
-  }
-}
-
 // ------------- CREATION AND ON SCREEN DISPLAY SECTION -------------
-var Column1 = new Column(1, 2, 10);
+
 
 // callElevator()
 
 // ------------- CREATION AND ON SCREEN DISPLAY SECTION -------------
 
 var floorRandom1 = Math.ceil(Math.random() * 10)
-var floorRandom2 = Math.ceil(Math.random() * 5)
+var floorRandom2 = Math.ceil(Math.random() * 10)
+var floorRandom3 = Math.ceil(Math.random() * 10)
 var directionArray = ["idle", "up", "down"];
 var x1 = Math.floor(Math.random() * 3)
 var x2 = Math.floor(Math.random() * 3)
 var directionRandom1 = directionArray[x1];
 var directionRandom2 = directionArray[x2];
 
-Column1.elevatorList[0].currentFloor = floorRandom1; Column1.elevatorList[0].direction = directionRandom1;
-Column1.elevatorList[1].currentFloor = floorRandom2; Column1.elevatorList[1].direction = directionRandom2;
-
+// ----------------------------------------
 // ------------- TEST SECTION -------------
+// ----------------------------------------
 
+// Column1.elevatorList[0].currentFloor = floorRandom1; Column1.elevatorList[0].direction = directionRandom1;
+// Column1.elevatorList[1].currentFloor = floorRandom2; Column1.elevatorList[1].direction = directionRandom2;
+// Column1.elevatorList[2].currentFloor = floorRandom3; Column1.elevatorList[1].direction = directionRandom2;
 
-Column1.requestElevator(floorRandom1, 'down');
-// Column1.requestElevator(10, 'up');
-// Column1.requestElevator(1, 'down');
-// Column1.requestElevator(8, 'down');
-// Column1.requestElevator(8, 'up');
-// Column1.requestElevator(6, 'down');
-// Column1.requestElevator(6, 'up');
-// Column1.requestElevator(4, 'down');
-// Column1.requestElevator(4, 'up');
-// Column1.requestElevator(2, 'down');
-// Column1.requestElevator(2, 'up');
+// ------------- SCENE #1  -------------
+// var Column1 = new Column(1, 2, 10);
+// Column1.elevatorList[0].currentFloor = 2; Column1.elevatorList[0].direction = "idle";
+// Column1.elevatorList[1].currentFloor = 6; Column1.elevatorList[1].direction = "idle";
+// Column1.requestElevator(3, 'up');
 
+// ------------- SCENE #2.1  -------------
+// var Column1 = new Column(1, 2, 10);
+// Column1.elevatorList[0].currentFloor = 10; Column1.elevatorList[0].direction = "idle";
+// Column1.elevatorList[1].currentFloor = 3; Column1.elevatorList[1].direction = "idle";
+
+// var elevatorscenario2_1 = Column1.requestElevator(1, 'up');
+// Column1.requestFloor(elevatorscenario2_1, 6);
+
+// var elevatorscenario2_2 = Column1.requestElevator(3, 'up');
+// Column1.requestFloor(elevatorscenario2_2, 5);
+
+// var elevatorscenario2_3 = Column1.requestElevator(9, 'down');
+// Column1.requestFloor(elevatorscenario2_2, 2);
+
+// ------------- SCENE #3.1  -------------
+var Column1 = new Column(1, 2, 10);
+Column1.elevatorList[0].currentFloor = 10; Column1.elevatorList[0].direction = "up";
+Column1.elevatorList[1].currentFloor = 3; Column1.elevatorList[1].direction = "up";
+
+var elevatorscenario3_1 = Column1.requestElevator(3, 'down');
+Column1.requestFloor(elevatorscenario3_1, 2);
 
 displayInfo()
-// Column1.findElevator();
-// Column1.elevatorList[1].moveElevator(5)
+
+var elevatorscenario3_0 = Column1.requestElevator(3, 'up');
+Column1.requestFloor(elevatorscenario3_0, 6);
+
+displayInfo()
+
+// // ------------- SCENE #3.2  -------------
+// var Column1 = new Column(1, 2, 10);
+// Column1.elevatorList[0].currentFloor = 2; Column1.elevatorList[0].direction = "idle";
+// Column1.elevatorList[1].currentFloor = 6; Column1.elevatorList[1].direction = "idle";
+var elevatorscenario3_2 = Column1.requestElevator(10, 'down');
+Column1.requestFloor(elevatorscenario3_2, 3);
+
+displayInfo()
