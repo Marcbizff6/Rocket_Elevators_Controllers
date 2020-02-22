@@ -58,8 +58,6 @@ class Column:
 
       scoreList.append(elevator) 
       print(scoreList)
-      # nearestElevator = abs(elevator.currentFloor - requestedFloor) 
-      # elevator.score = elevator.score + nearestElevator
     
     scoreList.sort(key=lambda x: x.score)
     lowestScore = scoreList[0]

@@ -202,14 +202,19 @@ function displayInfo() {
 
 // ------------- CREATION AND ON SCREEN DISPLAY SECTION -------------
 
-// var floorRandom1 = Math.ceil(Math.random() * 10)
-// var floorRandom2 = Math.ceil(Math.random() * 10)
-// var floorRandom3 = Math.ceil(Math.random() * 10)
-// var directionArray = ["idle", "up", "down"];
-// var x1 = Math.floor(Math.random() * 3)
-// var x2 = Math.floor(Math.random() * 3)
-// var directionRandom1 = directionArray[x1];
-// var directionRandom2 = directionArray[x2];
+
+// callElevator()
+
+// ------------- CREATION AND ON SCREEN DISPLAY SECTION -------------
+
+var floorRandom1 = Math.ceil(Math.random() * 10)
+var floorRandom2 = Math.ceil(Math.random() * 10)
+var floorRandom3 = Math.ceil(Math.random() * 10)
+var directionArray = ["idle", "up", "down"];
+var x1 = Math.floor(Math.random() * 3)
+var x2 = Math.floor(Math.random() * 3)
+var directionRandom1 = directionArray[x1];
+var directionRandom2 = directionArray[x2];
 
 // ----------------------------------------
 // ------------- TEST SECTION -------------
@@ -225,7 +230,7 @@ function displayInfo() {
 // Column1.elevatorList[1].currentFloor = 6; Column1.elevatorList[1].direction = "idle";
 // Column1.requestElevator(3, 'up');
 
-// ------------- SCENE #2  -------------
+// ------------- SCENE #2.1  -------------
 // var Column1 = new Column(1, 2, 10);
 // Column1.elevatorList[0].currentFloor = 10; Column1.elevatorList[0].direction = "idle";
 // Column1.elevatorList[1].currentFloor = 3; Column1.elevatorList[1].direction = "idle";
@@ -239,20 +244,18 @@ function displayInfo() {
 // var elevatorscenario2_3 = Column1.requestElevator(9, 'down');
 // Column1.requestFloor(elevatorscenario2_2, 2);
 
-// ------------- SCENE #3  -------------
-// var Column1 = new Column(1, 2, 10);
-// Column1.elevatorList[0].currentFloor = 10; Column1.elevatorList[0].direction = "idle";
-// Column1.elevatorList[1].currentFloor = 3; Column1.elevatorList[1].direction = "up";
+// ------------- SCENE #3.1  -------------
+var Column1 = new Column(1, 2, 10);
+Column1.elevatorList[0].currentFloor = 10; Column1.elevatorList[0].direction = "idle";
+Column1.elevatorList[1].currentFloor = 3; Column1.elevatorList[1].direction = "up";
 
-// var elevatorscenario3_1 = Column1.requestElevator(3, 'down');
-// Column1.requestFloor(elevatorscenario3_1, 2);
+var elevatorscenario3_1 = Column1.requestElevator(3, 'down');
+Column1.requestFloor(elevatorscenario3_1, 2);
 
-// var elevatorscenario3_0 = Column1.requestElevator(3, 'up');
-// Column1.requestFloor(elevatorscenario3_0, 6);
+var elevatorscenario3_0 = Column1.requestElevator(3, 'up');
+Column1.requestFloor(elevatorscenario3_0, 6);
 
-// var elevatorscenario3_2 = Column1.requestElevator(10, 'down');
-// Column1.requestFloor(elevatorscenario3_2, 3);
-
-// ------------- DISPLAY SECTION  -------------
+var elevatorscenario3_2 = Column1.requestElevator(10, 'down');
+Column1.requestFloor(elevatorscenario3_2, 3);
 
 displayInfo()
