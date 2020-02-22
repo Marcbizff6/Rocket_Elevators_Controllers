@@ -1,261 +1,256 @@
-const lineBreak = '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
-let bestElevator = [];
+import random
+import math
 
+lineBreak = '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
+bestElevator = []
 
-// ------------- CLASS SECTION -------------
-class Column {
-  constructor(id, nbElevator, nbFloors) {
-    this.id = id;
-    this.nbElevator = nbElevator;
-    this.elevatorList = [];
-    this.floorList = [];
-    this.callButtonList = [];
+# ------------- CLASS SECTION -------------
+class Column:
+  def __init__ (self, id, nbElevator, nbFloors):
+    self.id = id
+    self.nbElevator = nbElevator
+    self.elevatorList = []
+    self.floorList = []
+    self.callButtonList = []
 
-    for (var i = 1; i <= nbFloors; i++) {
-      if (i != 1) {
-        this.callButtonList.push(new CallButtonClass("down", i));
-      }
-      if (i != nbFloors) {
-        this.callButtonList.push(new CallButtonClass("up", i));
-      }
-    }
+    for i in range(1, nbFloors+1):
+      if i != 1:
+        self.callButtonList.append(CallButtonClass("down", i))
 
-    for (var i = 0; i < nbElevator; i++) {
-      this.elevatorList.push(new Elevator(i, ""));
-    }
+      if i != nbFloors:
+        self.callButtonList.append(CallButtonClass("up", i))
 
-  }
+    for i in range(nbElevator):
+      self.elevatorList.append(Elevator(i, ""))
 
-  requestElevator(requestedFloor, Direction) {
-    var thebestelevator = this.findElevator(requestedFloor, Direction);
-    console.log(thebestelevator)
-    console.log("\n")
+  def requestElevator(self, requestedFloor, direction):
+    thebestelevator = self.findElevator(requestedFloor, direction)
+    print(thebestelevator)
+    print("\n")
     thebestelevator.moveElevator(requestedFloor)
     return thebestelevator
-  }
 
-  findElevator(requestedFloor, Direction) {
+  def requestFloor(self, elevator, requestedFloor):
+    thebestelevator.moveElevator(requestedFloor)
 
-    console.log(lineBreak);
-    console.log(`requestedFloor is ${requestedFloor}\nand direction is ${Direction}\n`);
-    console.log(`${lineBreak} \n`);
+  def findElevator(self, requestedFloor, direction):
 
-    let scoreList = [9999];
-    let bestElevator = [9999];
-    let bestElevatorCurrentFloor = [9999];
-    let gap = [];
-    this.elevatorList.forEach(Elevator => {
+    print(lineBreak);
+    print(requestedFloor, "is", requestedFloor, "\nand direction is ", direction, "\n")
+    print(lineBreak, "\n")
 
-      if (Elevator.currentFloor == requestedFloor && Elevator.direction == Direction) {
-        Elevator.score = 1;
-      }
-      else if (Elevator.currentFloor != requestedFloor && Elevator.direction == Direction) {
-        Elevator.score = 2;
-      }
-      else if (Elevator.direction == "idle") {
-        Elevator.score = 3;
-      }
-      else if (Elevator.currentFloor == requestedFloor && Elevator.direction !== Direction) {
-        Elevator.score = 4;
-      }
-      else if (Elevator.currentFloor != requestedFloor && Elevator.direction !== Direction) {
-        Elevator.score = 5;
-      }
+    scoreList = [9999]
+    bestElevator = [9999]
+    bestElevatorCurrentFloor = [9999]
+    gap = []
 
-      if (Elevator.score < scoreList[0]) {
-        scoreList.shift();
-        scoreList.push(Elevator.score);
-        // console.log(`scoreList : ${scoreList}`)
+    for elevator in self.elevatorList:
+      if(elevator.currentFloor == requestedFloor and elevator.direction == direction):
+        Elevator.score = 1
+      elif(elevator.currentFloor != requestedFloor and elevator.direction == direction):
+        Elevator.score = 2
+      elif(elevator.direction == "idle"):
+        Elevator.score = 3
+      elif(elevator.currentFloor == requestedFloor and elevator.direction != direction):
+        Elevator.score = 4
+      elif(elevator.currentFloor != requestedFloor and elevator.direction != direction):
+        Elevator.score = 5
 
-        bestElevator.shift();
-        bestElevator.push(Elevator.id);
-        // console.log(`bestElevator : ${bestElevator}`)
+      scoreList.append(elevator) 
+      print(scoreList)
+      # nearestElevator = abs(elevator.currentFloor - requestedFloor) 
+      # elevator.score = elevator.score + nearestElevator
+    
+    scoreList.sort(key=lambda x: x.score)
+    lowestScore = scoreList[0]
+    return lowestScore
 
-        bestElevatorCurrentFloor.shift();
-        bestElevatorCurrentFloor.push(Elevator.currentFloor);
-        // console.log(`bestElevatorCurrentFloor : ${bestElevator}`)
+    if (elevator.score < scoreList[0]):
+        scoreList.shift()
+        scoreList.append(elevator.score)
+        #print("scoreList :", scoreList)
 
-        gap.shift();
-        gap.push(Math.abs(Elevator.currentFloor - requestedFloor));
+        bestElevator.shift()
+        bestElevator.append(elevator.id)
+        #print("bestElevator :", bestElevator}`)
 
-        console.log(lineBreak);
-        console.log(`Elevator.id = ${Elevator.id};\nElevator.currentFloor = ${Elevator.currentFloor};\nElevator.direction = ${Elevator.direction};\nElevator.score = ${Elevator.score};\ngap = ${gap}\n`)
-        console.log(`${lineBreak} \n`);
-        return Elevator
+        bestElevatorCurrentFloor.shift()
+        bestElevatorCurrentFloor.append(elevator.currentFloor)
+        #print("bestElevatorCurrentFloor :", bestElevator)
 
-      } if (Elevator.score == scoreList[0])
-        gap.push(Math.abs(Elevator.currentFloor - requestedFloor));
-      // console.log(`gap : ${gap} \n`)
-      if (gap[0] > gap[1]) {
-        gap.shift();
+        gap.shift()
+        gap.append(abs(elevator.currentFloor - requestedFloor))
 
-        bestElevator.shift();
-        bestElevator.push(Elevator.id);
+        print(lineBreak)
+        print("Elevator.id =", Elevator.id, "\nElevator.currentFloor =", Elevator.currentFloor,"\nElevator.direction =", Elevator.direction, "\nElevator.score =", Elevator.score, "\ngap =", gap, "\n")
+        print(lineBreak, "\n")
+        return elevator
 
-        console.log(lineBreak);
-        console.log(`Elevator.id = ${Elevator.id};\nElevator.currentFloor = ${Elevator.currentFloor};\nElevator.direction = ${Elevator.direction};\nElevator.score = ${Elevator.score};\ngap = ${gap}\n`)
-        console.log(`${lineBreak} \n`);
-        return Elevator
-      }
-    });
-    console.log(`Best Elevator ${bestElevator} \n`)
+        if (elevator.score == scoreList[0]):
+          gap.append(abs(Elevator.currentFloor - requestedFloor));
+          print("Gap", gap)
+      
+        if (gap[0] > gap[1]):
+          gap.shift()
 
-    var chosenElevator = this.elevatorList.find(elevator => elevator.id == bestElevator[0])
+          bestElevator.shift()
+          bestElevator.append(elevator.id)
+
+        print(lineBreak)
+        print("Elevator.id =", Elevator.id, "\nElevator.currentFloor =", Elevator.currentFloor,"\nElevator.direction =", Elevator.direction, "\nElevator.score =", Elevator.score, "\ngap =", gap, "\n")
+        print(lineBreak, "\n")
+
+        return elevator
+
+    print("Best Elevator", bestElevator, "\n")
+    
+    chosenElevator = self.elevatorList.find(elevator in elevator.id == bestElevator[0])
     return chosenElevator
-  }
-
-  requestFloor(elevator, requestedFloor) {
-    elevator.moveElevator(requestedFloor);
-  }
-}
-
-class CallButtonClass {
-  constructor(direction, floor) {
-    this.direction = direction;
-    this.floor = floor;
-    this.light = "off"
-  }
-}
-
-class Elevator {
-  constructor(id, currentFloor) {
-    this.id = id;
-    this.floorRequestedButton = [];
-    this.doors = "closed"
-    this.direction = "idle"
-    this.currentFloor = currentFloor;
-    this.requestList = [];
-    this.score = null;
-  }
-  moveElevator(floorRequestedButton) {
-    var x = Math.abs(this.currentFloor - floorRequestedButton)
-    for (var i = 0; i < x; i++) {
-      if (this.currentFloor < floorRequestedButton) {
-        this.direction = "up"
-        console.log("this floor : ", this.currentFloor)
-        this.currentFloor++
-        console.log("move up to floor : ", this.currentFloor)
-        console.log("up to this floor : ", floorRequestedButton)
-        console.log("\n")
-        this.direction = "idle" 
-      }
-    }
-
-    for (var i = 0; i <= x; i++) {
-      if (this.currentFloor > floorRequestedButton) {
-        this.direction = "down"
-        console.log("this floor : ", this.currentFloor)
-        this.currentFloor--
-        console.log("move down to floor : ", this.currentFloor)
-        console.log("down to this floor : ", floorRequestedButton)
-        console.log("\n")
-        this.direction = "idle"       
-      }
-    }
-    console.log("door_open")
-    console.log("close_open \n")
-  }
-}
-
-// ------------- FUNCTION SECTION -------------
-
-// displayElevatorInfo() : Display the info of elevators to better pinpoint useful informations
-function displayElevatorInfo() {
-  for (var i = 0; i < Column1.nbElevator; i++) {
-    console.log("id : ", Column1.elevatorList[i].id);
-    console.log("floorRequestedButton : ", Column1.elevatorList[i].floorRequestedButton);
-    console.log("doors : ", Column1.elevatorList[i].doors);
-    console.log("direction : ", Column1.elevatorList[i].direction);
-    console.log("currentFloor : ", Column1.elevatorList[i].currentFloor);
-    console.log("requestList : ", Column1.elevatorList[i].requestList);
-    console.log("score : ", Column1.elevatorList[i].score);
-    console.log("\n");
-  }
-}
-
-// displayColumnInfo() : Display the info of Column to better pinpoint useful informations
-function displayColumnInfo() {
-  console.log("Column id : ", Column1.id);
-  console.log("Column nbElevator : ", Column1.nbElevator);
-  console.log("Column elevatorList : ", Column1.elevatorList);
-  console.log("Column floorList : ", Column1.floorList);
-  console.log("Column callButtonList : ", Column1.callButtonList);
-  console.log("\n");
-}
-
-// displayCallButtonList() : Display the info of Button to better pinpoint useful informations
-function displayCallButtonList() {
-  for (var i = 0; i < Column1.callButtonList.length; i++) {
-    console.log("Button ", i, " direction : ", Column1.callButtonList[i].direction);
-    console.log("Button ", i, " floor : ", Column1.callButtonList[i].floor);
-    // console.log("Button " , i , " light : ", Column1.callButtonList[i].light);
-    console.log("\n")
-  }
-}
-
-// displayInfo() : Display all the info of display functions
-function displayInfo() {
-  displayElevatorInfo()
-  // displayColumnInfo()
-  // displayCallButtonList()
-}
-
-// ------------- CREATION AND ON SCREEN DISPLAY SECTION -------------
 
 
-// callElevator()
 
-// ------------- CREATION AND ON SCREEN DISPLAY SECTION -------------
+class CallButtonClass:
+  def __init__ (self, direction, floor):
+    self.direction = direction
+    self.floor = floor
+    self.light = "off"
 
-var floorRandom1 = Math.ceil(Math.random() * 10)
-var floorRandom2 = Math.ceil(Math.random() * 10)
-var floorRandom3 = Math.ceil(Math.random() * 10)
-var directionArray = ["idle", "up", "down"];
-var x1 = Math.floor(Math.random() * 3)
-var x2 = Math.floor(Math.random() * 3)
-var directionRandom1 = directionArray[x1];
-var directionRandom2 = directionArray[x2];
+class Elevator:
+  def __init__ (self, id, currentFloor):
+    self.id = id
+    self.floorRequestedButton = []
+    self.doors = "closed"
+    self.direction = "idle"
+    self.currentFloor = currentFloor
+    self.requestList = []
+    self.score = None
 
-// ----------------------------------------
-// ------------- TEST SECTION -------------
-// ----------------------------------------
+  def moveElevator(self, floorRequestedButton):
+    x = abs(self.currentFloor - floorRequestedButton)
+    for i in range(floorRequestedButton):
+      if self.currentFloor < floorRequestedButton:
+        self.direction = "up"
+        print("self floor : ", self.currentFloor)
+        self.currentFloor +=1
+        print("move up to floor : ", self.currentFloor)
+        print("up to self floor : ", floorRequestedButton)
+        print("\n")
+        self.direction = "idle" 
 
-// Column1.elevatorList[0].currentFloor = floorRandom1; Column1.elevatorList[0].direction = directionRandom1;
-// Column1.elevatorList[1].currentFloor = floorRandom2; Column1.elevatorList[1].direction = directionRandom2;
-// Column1.elevatorList[2].currentFloor = floorRandom3; Column1.elevatorList[1].direction = directionRandom2;
 
-// ------------- SCENE #1  -------------
-// var Column1 = new Column(1, 2, 10);
-// Column1.elevatorList[0].currentFloor = 2; Column1.elevatorList[0].direction = "idle";
-// Column1.elevatorList[1].currentFloor = 6; Column1.elevatorList[1].direction = "idle";
-// Column1.requestElevator(3, 'up');
+    for i in range(1, x+1):
+      if (self.currentFloor > floorRequestedButton):
+        self.direction = "down"
+        print("self floor : ", self.currentFloor)
+        self.direction -= 1
+        print("move down to floor : ", self.currentFloor)
+        print("down to self floor : ", floorRequestedButton)
+        print("\n")
+        self.direction = "idle"     
+        print("door_open")
+        print("close_open \n")
 
-// ------------- SCENE #2.1  -------------
-// var Column1 = new Column(1, 2, 10);
-// Column1.elevatorList[0].currentFloor = 10; Column1.elevatorList[0].direction = "idle";
-// Column1.elevatorList[1].currentFloor = 3; Column1.elevatorList[1].direction = "idle";
+# ------------- FUNCTION SECTION -------------
 
-// var elevatorscenario2_1 = Column1.requestElevator(1, 'up');
-// Column1.requestFloor(elevatorscenario2_1, 6);
+# displayElevatorInfo() : Display the info of elevators to better pinpoint useful informations
+def displayElevatorInfo(self):
+  for i in Column1.nbElevator:
+    print("id : ", Column1.elevatorList[i].id)
+    print("floorRequestedButton : ", Column1.elevatorList[i].floorRequestedButton)
+    print("doors : ", Column1.elevatorList[i].doors)
+    print("direction : ", Column1.elevatorList[i].direction)
+    print("currentFloor : ", Column1.elevatorList[i].currentFloor)
+    print("requestList : ", Column1.elevatorList[i].requestList)
+    print("score : ", Column1.elevatorList[i].score)
+    print("\n")
 
-// var elevatorscenario2_2 = Column1.requestElevator(3, 'up');
-// Column1.requestFloor(elevatorscenario2_2, 5);
+# displayColumnInfo() : Display the info of Column to better pinpoint useful informations
+def displayColumnInfo(self):
+  print("Column id : ", Column1.id)
+  print("Column nbElevator : ", Column1.nbElevator)
+  print("Column elevatorList : ", Column1.elevatorList)
+  print("Column floorList : ", Column1.floorList)
+  print("Column callButtonList : ", Column1.callButtonList)
+  print("\n");
 
-// var elevatorscenario2_3 = Column1.requestElevator(9, 'down');
-// Column1.requestFloor(elevatorscenario2_2, 2);
+# displayCallButtonList() : Display the info of Button to better pinpoint useful informations
+def displayCallButtonList(self):
+  for i in range(len(Column1.callButtonList)):
+    print("Button ", i, " direction : ", Column1.callButtonList[i].direction)
+    print("Button ", i, " floor : ", Column1.callButtonList[i].floor)
+    # print("Button " , i , " light : ", Column1.callButtonList[i].light)
+    print("\n")
 
-// ------------- SCENE #3.1  -------------
-var Column1 = new Column(1, 2, 10);
-Column1.elevatorList[0].currentFloor = 10; Column1.elevatorList[0].direction = "idle";
-Column1.elevatorList[1].currentFloor = 3; Column1.elevatorList[1].direction = "up";
+# displayInfo() : Display all the info of display functions
+def displayInfo(self):
+  displayElevatorInfo(self)
+  displayColumnInfo(self)
+  displayCallButtonList(self)
 
-var elevatorscenario3_1 = Column1.requestElevator(3, 'down');
-Column1.requestFloor(elevatorscenario3_1, 2);
+# ------------- CREATION AND ON SCREEN DISPLAY SECTION -------------
 
-var elevatorscenario3_0 = Column1.requestElevator(3, 'up');
-Column1.requestFloor(elevatorscenario3_0, 6);
 
-var elevatorscenario3_2 = Column1.requestElevator(10, 'down');
-Column1.requestFloor(elevatorscenario3_2, 3);
+# callElevator()
+
+# ------------- CREATION AND ON SCREEN DISPLAY SECTION -------------
+
+# floorRandom1 = math.ceil(random() * 10)
+# floorRandom2 = math.ceil(math.random() * 10)
+# floorRandom3 = math.ceil(math.random() * 10)
+# directionArray = ["idle", "up", "down"]
+# x1 = math.floor(math.random() * 3)
+# x2 = math.floor(math.random() * 3)
+# directionRandom1 = directionArray[x1]
+# directionRandom2 = directionArray[x2]
+
+# ----------------------------------------
+# ------------- TEST SECTION -------------
+# ----------------------------------------
+
+# Column1.elevatorList[0].currentFloor = floorRandom1; Column1.elevatorList[0].direction = directionRandom1;
+# Column1.elevatorList[1].currentFloor = floorRandom2; Column1.elevatorList[1].direction = directionRandom2;
+# Column1.elevatorList[2].currentFloor = floorRandom3; Column1.elevatorList[1].direction = directionRandom2;
+
+# ------------- SCENE #1  -------------
+Column1 = Column(1, 2, 10)
+Column1.elevatorList[0].currentFloor = 2
+Column1.elevatorList[0].direction = "idle"
+Column1.elevatorList[1].currentFloor = 6
+Column1.elevatorList[1].direction = "idle"
+thebestelevator = Column1.requestElevator(3, "up")
+Column1.requestFloor(thebestelevator, 7)
+# Column1.requestElevator(3, 'up')
+
+# ------------- SCENE #2.1  -------------
+# Column1 = Column(1, 2, 10)
+# Column1.elevatorList[0].currentFloor = 10
+# Column1.elevatorList[0].direction = "idle"
+# Column1.elevatorList[1].currentFloor = 3
+# Column1.elevatorList[1].direction = "idle"
+
+# elevatorscenario2_1 = Column1.requestElevator(1, 'up')
+# Column1.requestFloor(elevatorscenario2_1, 6)
+
+# elevatorscenario2_2 = Column1.requestElevator(3, 'up')
+# Column1.requestFloor(elevatorscenario2_2, 5)
+
+# elevatorscenario2_3 = Column1.requestElevator(9, 'down')
+# Column1.requestFloor(elevatorscenario2_2, 2)
+
+# ------------- SCENE #3.1  -------------
+# Column1 = Column(1, 2, 10)
+# Column1.elevatorList[0].currentFloor = 10
+# Column1.elevatorList[0].direction = "idle";
+# Column1.elevatorList[1].currentFloor = 3
+# Column1.elevatorList[1].direction = "up"
+
+# elevatorscenario3_1 = Column1.requestElevator(3, 'down')
+# Column1.requestFloor(elevatorscenario3_1, 2)
+
+# elevatorscenario3_0 = Column1.requestElevator(3, 'up')
+# Column1.requestFloor(elevatorscenario3_0, 6)
+
+# elevatorscenario3_2 = Column1.requestElevator(10, 'down')
+# Column1.requestFloor(elevatorscenario3_2, 3)
 
 displayInfo()
