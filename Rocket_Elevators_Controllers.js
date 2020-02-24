@@ -137,7 +137,7 @@ class Elevator {
         console.log("move up to floor : ", this.currentFloor)
         console.log("up to this floor : ", floorRequestedButton)
         console.log("\n")
-        this.direction = "idle" 
+        this.direction = "idle"
       }
     }
 
@@ -149,7 +149,7 @@ class Elevator {
         console.log("move down to floor : ", this.currentFloor)
         console.log("down to this floor : ", floorRequestedButton)
         console.log("\n")
-        this.direction = "idle"       
+        this.direction = "idle"
       }
     }
     console.log("door_open")
