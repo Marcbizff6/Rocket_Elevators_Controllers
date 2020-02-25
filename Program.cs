@@ -1,88 +1,113 @@
-﻿using System.Net.WebSockets;
-using System;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Rocket_Elevators_Controllers
 {
-
-  public class Column {
+  class Controller
+  {
     public int id;
-    public int numberOfFloors;
-    public int numberOfElevator;
-    public int elevatorList;
+    public int nbColumn;
 
-    public void Info()
+    public List<Column> columns;
+    // public List<Floor> floors;
+
+    public Controller(int id, int nbColumn, int nbElevator, int nbFloor)
     {
-      System.Console.WriteLine("Hello, my id is " + id + " and my number of floors is " + numberOfFloors);
+      this.id = id;
+      this.nbColumn = nbColumn;
+
+      columns = new List<Column>();
+
+      for (var i = 0; i < nbColumn; i++)
+      {
+        Column column = new Column(i + 1, nbElevator, nbFloor);
+        columns.Add(column);
+        Console.WriteLine("Column id : " + columns[i].id + "\n");
+      }
     }
   }
 
+  class Column
+  {
+    public int id;
+    public int nbElevator;
+    public int nbFloor;
 
+    public List<Elevator> elevators;
+    public List<Floor> floors;
 
+    public Column(int id, int nbElevator, int nbFloor)
+    {
+      this.nbFloor = nbFloor;
+      this.id = id;
+      this.nbElevator = nbElevator;
+      elevators = new List<Elevator>();
+      floors = new List<Floor>();
 
+      for (var i = 0; i < nbElevator; i++)
+      {
+        Elevator elevator = new Elevator(i + 1, 1);
+        elevators.Add(elevator);
+        Console.WriteLine("Elevator id : " + elevators[i].id + " on currentFloor : " + elevators[i].currentFloor);
 
+      }
+      for (var j = 0; j < 4; j++)
+      {
+        for (var i = 0; i < nbFloor; i++)
+        {
+          Floor floor = new Floor(i + 1);
+          floors.Add(floor);
+          System.Console.WriteLine("Floor # : " + floors[i].id);
+        }
+      }
+    }
+  }
 
+  class Floor
+  {
+    public int id;
 
+    public Floor(int id)
+    {
+      this.id = id;
+    }
+  }
 
-  
+  class Elevator
+  {
+    public int id;
+    public int currentFloor;
+
+    public Elevator(int id, int currentFloor)
+    {
+      this.id = id;
+      this.currentFloor = currentFloor;
+    }
+  }
+
   class Program
   {
     static void Main(string[] args)
+    {
 
-  {
-  // int[]totalFloors = {};
-  Column columnA = new Column();
-  columnA.id = 1;
-  columnA.numberOfFloors = 2;
-  columnA.Info();
-      // var columnTotal = 4;
-      // var columnAboveGround = 3;
-      // var columnBasement = 1;
-      // var elevatorByColumn = 5;<
-      // var totalFloors = 66;
-      // var floorNumber = [66];
-      // var basementTotal = 6;
-      // var aboveGroundFloor = totalFloors - basementTotal;
-      // var packOfFloor = aboveGroundFloor / columnAboveGround;
-      // var RC = 1;
-      // int[] ColumnARange = {1, 2};
-      // System.Console.WriteLine(ColumnARange[1]);
-      // ColumnAboveGroundA deserve RC + basement // array = [firstBasement TO lastBasement + RC]
-      // ColumnAboveGroundB deserve RC + packOfFloor // array = [RC + 2 TO 20]
-      // ColumnAboveGroundB deserve RC + packOfFloor // array = [RC + 21 TO 40]
-      // ColumnAboveGroundB deserve RC + packOfFloor // array = [RC + 41 TO 60]
-      // floorID [-5, -4, ... 59, 60]
-      // basement = totalFloor[0 to 5]
+      var totalFloor = 66;
 
-      // // Creation of floorNumber array
-      // int[] basementNumber = new int[totalFloors];
-      // for (var i = 0; i < basementTotal; i++)
-      // {
-      //   basementNumber[i] = i;
-      //   System.Console.WriteLine("Basement Number is : " + basementNumber[i]);
-      // }
+      // Creation of the floor list
+      int[] floorList = new int[totalFloor];
+      for (int i = 0; i < totalFloor; i++)
+      {
+        floorList[i] = i + 1;
+        // Console.WriteLine("Floor id : " + floorList[i]);
+      }
 
-      // int[] rcNumber = new int[totalFloors];
-      // for (var i = basementTotal; i == basementTotal; i++)
-      // {
-      //   rcNumber[i] = i;
-      //   System.Console.WriteLine("Rc Number is : " + rcNumber[i]);
-      // }
+      // Elevator Elevator1 = new Elevator(1, 20);
+      // Console.WriteLine("Elevator id : " + Elevator1.id);
+      // Console.WriteLine("Elevator currentFloor : " + Elevator1.currentFloor + "\n" );
 
-      // int[] aboveGroundFloorNumber = new int[totalFloors];
-      // for (var i = basementTotal+1; i < totalFloors; i++)
-      // {
-      //   aboveGroundFloorNumber[i] = i;
-      //   System.Console.WriteLine("Above ground floor Number is : " + aboveGroundFloorNumber[i]);
-      // }
+      // Column Column1 = new Column(1, 5, 20);
+      Controller Controller1 = new Controller(1, 4, 5, 20);
 
-      // for (var i = 0; i < floorNumber.Length; i++)
-      // {
-      //   floorNumber[i] = i;
-      //   System.Console.WriteLine("Floor Number is : " + floorNumber[i]);
-      // }
-      // System.Console.WriteLine(basementNumber[1]);
-      // System.Console.WriteLine(rcNumber[1]);
-      // System.Console.WriteLine(totalFloors[1]);
-   }
+    }
   }
 }
+
