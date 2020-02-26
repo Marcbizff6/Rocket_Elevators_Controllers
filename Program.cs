@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.IO.Enumeration;
+using System;
 using System.Collections.Generic;
 
 namespace Rocket_Elevators_Controllers
@@ -9,7 +10,6 @@ namespace Rocket_Elevators_Controllers
     public int nbColumn;
 
     public List<Column> columns;
-    // public List<Floor> floors;
 
     public Controller(int id, int nbColumn, int nbElevator, int nbFloor)
     {
@@ -22,8 +22,38 @@ namespace Rocket_Elevators_Controllers
       {
         Column column = new Column(i + 1, nbElevator, nbFloor);
         columns.Add(column);
-        Console.WriteLine("Column id : " + columns[i].id + "\n");
+        // Console.WriteLine("Column id : " + columns[i].id + "\n");
       }
+
+    }
+    public void findColumn(int requestedFloor)
+    {
+      if (requestedFloor < 7)
+      {
+        System.Console.WriteLine("Column : " + columns[0] + " " + columns[0].id);
+        columns[0].findElevator(requestedFloor);
+      }
+      else if (requestedFloor > 7 && requestedFloor <= 20)
+      {
+        System.Console.WriteLine("Column : " + columns[1] + " " + columns[1].id);
+        columns[1].findElevator(requestedFloor);
+      }
+      else if (requestedFloor > 20 && requestedFloor <= 40)
+      {
+        System.Console.WriteLine("Column : " + columns[2] + " " + columns[2].id);
+        columns[2].findElevator(requestedFloor);
+      }
+      else if (requestedFloor > 40 && requestedFloor <= 60)
+      {
+        System.Console.WriteLine("Column : " + columns[3] + " " + columns[3].id);
+        columns[3].findElevator(requestedFloor);
+      }
+      // else if (requestedFloor == 7)
+      // {
+      //   System.Console.WriteLine("findColumn : " + columns[2].id);
+      //   columns[3].findElevator(requestedFloor);
+      // }
+      System.Console.WriteLine("end of requestedFloor # : " + requestedFloor + "\n");
     }
   }
 
@@ -44,21 +74,32 @@ namespace Rocket_Elevators_Controllers
       elevators = new List<Elevator>();
       floors = new List<Floor>();
 
-      for (var i = 0; i < nbElevator; i++)
+      for (var k = 0; k < 1; k++)
       {
-        Elevator elevator = new Elevator(i + 1, 1);
-        elevators.Add(elevator);
-        Console.WriteLine("Elevator id : " + elevators[i].id + " on currentFloor : " + elevators[i].currentFloor);
-
-      }
-      for (var j = 0; j < 4; j++)
-      {
-        for (var i = 0; i < nbFloor; i++)
+        for (var i = 0; i < nbElevator; i++)
         {
-          Floor floor = new Floor(i + 1);
-          floors.Add(floor);
-          System.Console.WriteLine("Floor # : " + floors[i].id);
+          Elevator elevator = new Elevator(i + 1, 1);
+          elevators.Add(elevator);
+          // Console.WriteLine("Elevator id : " + elevators[i].id + " on elevatorFloor : " + elevators[i].elevatorFloor);
         }
+
+        // for (var i = 0; i < nbFloor; i++)
+        // {
+        //   Floor floor = new Floor(i + 1);
+        //   floors.Add(floor);
+        //   System.Console.WriteLine("Floor # : " + floors[i].id);
+        // }
+      }
+    }
+    public void findElevator(int requestedFloor)
+    {
+      if (requestedFloor < 7 && requestedFloor <= 20)
+      {
+        System.Console.WriteLine("findElevator with this id : " + elevators[0].id);
+      }
+      else if (requestedFloor < 20 && requestedFloor <= 40)
+      {
+        System.Console.WriteLine("findElevator with this id : " + elevators[1].id);
       }
     }
   }
@@ -76,12 +117,12 @@ namespace Rocket_Elevators_Controllers
   class Elevator
   {
     public int id;
-    public int currentFloor;
+    public int elevatorFloor;
 
-    public Elevator(int id, int currentFloor)
+    public Elevator(int id, int elevatorFloor)
     {
       this.id = id;
-      this.currentFloor = currentFloor;
+      this.elevatorFloor = elevatorFloor;
     }
   }
 
@@ -90,23 +131,27 @@ namespace Rocket_Elevators_Controllers
     static void Main(string[] args)
     {
 
-      var totalFloor = 66;
+      var totalFloor = 6;
+
+      Controller Controller1 = new Controller(1, 4, 5, 2);
 
       // Creation of the floor list
       int[] floorList = new int[totalFloor];
       for (int i = 0; i < totalFloor; i++)
       {
         floorList[i] = i + 1;
-        // Console.WriteLine("Floor id : " + floorList[i]);
+        // Console.WriteLine("Floor id : " + floorList[i] + "\n");
       }
 
-      // Elevator Elevator1 = new Elevator(1, 20);
-      // Console.WriteLine("Elevator id : " + Elevator1.id);
-      // Console.WriteLine("Elevator currentFloor : " + Elevator1.currentFloor + "\n" );
-
-      // Column Column1 = new Column(1, 5, 20);
-      Controller Controller1 = new Controller(1, 4, 5, 20);
-
+      Controller1.findColumn(1);
+      // Controller1.findColumn(7);
+      Controller1.findColumn(19);
+      Controller1.findColumn(20);
+      Controller1.findColumn(21);
+      Controller1.findColumn(39);
+      Controller1.findColumn(40);
+      Controller1.findColumn(41);
+      Controller1.findColumn(60);
     }
   }
 }
