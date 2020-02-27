@@ -1,6 +1,6 @@
-﻿using System.IO.Enumeration;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.IO.Enumeration;
 
 namespace Rocket_Elevators_Controllers
 {
@@ -11,7 +11,7 @@ namespace Rocket_Elevators_Controllers
 
     public List<Column> columns;
 
-    public Controller(int id, int nbColumn, int nbElevator, int nbFloor)
+    public Controller(int id, int nbColumn, int nbElevator, int totalFloor, int totalBasement)
     {
       this.id = id;
       this.nbColumn = nbColumn;
@@ -23,26 +23,26 @@ namespace Rocket_Elevators_Controllers
       {
         if (i == 0)
         {
-          Column column = new Column(i + 1, nbElevator, nbFloor);
+          Column column = new Column(i + 1, nbElevator, totalFloor, totalBasement);
           columns.Add(column);
           Console.WriteLine("Column id : " + columns[i].id + "\n");
 
         }
         else if (i == 1)
         {
-          Column column = new Column(i + 1, nbElevator, nbFloor);
+          Column column = new Column(i + 1, nbElevator, totalFloor, totalBasement);
           columns.Add(column);
           Console.WriteLine("Column id : " + columns[i].id + "\n");
         }
         else if (i == 2)
         {
-          Column column = new Column(i + 1, nbElevator, nbFloor);
+          Column column = new Column(i + 1, nbElevator, totalFloor, totalBasement);
           columns.Add(column);
           Console.WriteLine("Column id : " + columns[i].id + "\n");
         }
         else if (i == 3)
         {
-          Column column = new Column(i + 1, nbElevator, nbFloor);
+          Column column = new Column(i + 1, nbElevator, totalFloor, totalBasement);
           columns.Add(column);
           Console.WriteLine("Column id : " + columns[i].id + "\n");
         }
@@ -72,32 +72,55 @@ namespace Rocket_Elevators_Controllers
         System.Console.WriteLine("findColumn : " + columns[3] + " " + columns[3].id);
         columns[3].findElevator(requestedFloor);
       }
-      // else if (requestedFloor == 7)
+      // else if (requestedFloor == 1)
       // {
       //   System.Console.WriteLine("findColumn : " + columns[2].id);
       //   columns[3].findElevator(requestedFloor);
       // }
-      System.Console.WriteLine("end of requestedFloor # : " + requestedFloor + "\n");
+      // System.Console.WriteLine("end of requestedFloor # : " + requestedFloor + "\n");
     }
+
+    // public Elevator RequestElevator(int FloorNumber, string Direction)
+    // {
+    //   Column bestColumn = null;
+    //   if (user.Position == 1)
+    //   {
+    //     bestColumn = findColumn(user.RequestedFloor);
+    //   }
+    //   else
+    //   {
+    //     bestColumn = findColumn(user.Position);
+    //   }
+    //   Elevator bestElevator = bestColumn.findElevator(FloorNumber, Direction);
+    //   bestElevator.moveElevator(FloorNumber);
+    //   return bestElevator;
+    // }
+    // public void AssignElevator(int RequestedFloor, Elevator bestElevator)
+    // {
+    //   bestElevator.moveElevator(RequestedFloor);
+    // }
   }
 
   class Column
   {
     public int id;
     public int nbElevator;
-    public int nbFloor;
+    public int totalFloor;
+    public int totalBasement;
 
     public List<Elevator> elevators;
     public List<Floor> floors;
 
-    public Column(int id, int nbElevator, int nbFloor)
+    public Column(int id, int nbElevator, int totalFloor, int totalBasement)
     {
-      this.nbFloor = nbFloor;
+      this.totalFloor = totalFloor;
       this.id = id;
       this.nbElevator = nbElevator;
+      this.totalBasement = totalBasement;
       elevators = new List<Elevator>();
       floors = new List<Floor>();
 
+      // creating the elevators
       for (var i = 0; i < nbElevator; i++)
       {
         Elevator elevator = new Elevator(i + 1, 1, "idle");
@@ -105,54 +128,97 @@ namespace Rocket_Elevators_Controllers
         // Console.WriteLine("Elevator id : " + elevators[i].id + " on elevatorFloor : " + elevators[i].elevatorFloor);
       }
 
-      // for (var i = 0; i < nbFloor; i++)
+      //*************** Creation of the floor list ***************\\
+      // Setting the id and the direction of each floor
+
+      for (var i = 0; i < totalBasement; i++)
+      {
+        Floor floor = new Floor(i - totalBasement + 1, "up");
+        floors.Add(floor);
+        System.Console.WriteLine("Floor id : " + floors[i].id);
+        System.Console.WriteLine("Floor direction : " + floors[i].floorDirection);
+      }
+
+      for (var i = totalBasement; i == totalBasement; i++)
+      {
+        Floor floor = new Floor(i - totalBasement + 1, "idle");
+        floors.Add(floor);
+        System.Console.WriteLine("Floor id : " + floors[i].id);
+        System.Console.WriteLine("Floor direction : " + floors[i].floorDirection);
+      }
+
+      for (var i = totalBasement + 1; i < totalFloor; i++)
+      {
+        Floor floor = new Floor(i - totalBasement + 1, "down");
+        floors.Add(floor);
+        System.Console.WriteLine("Floor id : " + floors[i].id);
+        System.Console.WriteLine("Floor direction : " + floors[i].floorDirection);
+      }
+      // for (int i = 0; i < totalBasement; i++)
       // {
-      //   Floor floor = new Floor(i + 1);
-      //   floors.Add(floor);
-      //   System.Console.WriteLine("Floor # : " + floors[i].id);
+      //   floorList[i] = i - totalBasement + 1;
+      //   Console.WriteLine("Floor id (basement): " + floorList[i] + "\n");
+      // }
+      // for (int i = totalBasement; i == totalBasement; i++)
+      // {
+      //   floorList[i] = i - totalBasement + 1;
+      //   Console.WriteLine("RC Floor: " + floorList[i] + "\n");
+      // }
+      // for (int i = totalBasement + 1; i < totalFloor; i++)
+      // {
+      //   floorList[i] = i - totalBasement + 1;
+      //   Console.WriteLine("Floor id : " + floorList[i] + "\n");
       // }
     }
+
 
     // Find the best elevator
     public void findElevator(int requestedFloor)
     {
-      foreach (var elevator in elevators)
+      int bestScore = 9999;
+      // var bestElevator = 9999;
+      var gap = 9999;
+      foreach (Elevator elevator in this.elevators)
       {
         if (elevator.elevatorFloor == requestedFloor)
         {
-          elevator.score = 1;
+          gap = Math.Abs(elevator.elevatorFloor - requestedFloor);
+          elevator.score = 100 + gap;
           System.Console.WriteLine("Elevator score : " + elevator.score);
+          if (elevator.score < bestScore) { bestScore = elevator.score; }
         }
         else if (elevator.elevatorFloor != requestedFloor)
         {
-          elevator.score = 2;
+          gap = Math.Abs(elevator.elevatorFloor - requestedFloor);
+          elevator.score = 200 + gap;
           System.Console.WriteLine("Elevator score : " + elevator.score);
+          if (elevator.score < bestScore) { bestScore = elevator.score; }
         }
-
-
+        else if (elevator.elevatorFloor != requestedFloor && elevator.elevatorDirection == "down")
+        {
+          gap = Math.Abs(elevator.elevatorFloor - requestedFloor);
+          elevator.score = 200 + gap;
+          System.Console.WriteLine("Elevator score : " + elevator.score);
+          if (elevator.score < bestScore) { bestScore = elevator.score; }
+        }
+        else if (elevator.elevatorFloor == requestedFloor)
+        {
+          System.Console.WriteLine("No result\n");
+        }
+        System.Console.WriteLine("If #final Best score : " + bestScore + "\n");
       }
-      // if (requestedFloor < 20)
-      // {
-      //   foreach (var elevator in elevators)
-      //   {
-
-      //     System.Console.WriteLine("findElevator with this id : " + elevators[0].id);
-      //   }
-      // }
-      // else if (requestedFloor >= 20)
-      // {
-      //   System.Console.WriteLine("findElevator with this id : " + elevators[1].id);
-      // }
     }
   }
 
   class Floor
   {
     public int id;
+    public string floorDirection;
 
-    public Floor(int id)
+    public Floor(int id, string floorDirection)
     {
       this.id = id;
+      this.floorDirection = floorDirection;
     }
   }
 
@@ -176,41 +242,46 @@ namespace Rocket_Elevators_Controllers
       // Move up
       if (this.elevatorFloor < requestedFloor)
       {
-        Console.WriteLine("Elevator going : ", this.elevatorDirection);
+        this.elevatorDirection = "up";
+        Console.WriteLine("Elevator going : " + this.elevatorDirection);
         while (this.elevatorFloor < requestedFloor)
         {
           this.elevatorFloor++;
-          Console.WriteLine("Elevator going : ", this.elevatorFloor);
+          Console.WriteLine("Elevator going : " + this.elevatorFloor);
         }
       }
 
       // Moving down
       if (this.elevatorFloor > requestedFloor)
       {
-        Console.WriteLine("MOVING : Elevator is moving", this.elevatorDirection);
+        this.elevatorDirection = "down";
+        Console.WriteLine("Elevator going : " + this.elevatorDirection);
         while (this.elevatorFloor > requestedFloor)
         {
-          Console.WriteLine("MOVING : Elevator is now at floor", this.elevatorFloor);
           this.elevatorFloor--;
+          Console.WriteLine("Elevator going : " + this.elevatorFloor);
         }
       }
 
       // At the current floor
       if (this.elevatorFloor == requestedFloor)
       {
-        Console.WriteLine("MOVING : Elevator arrived at floor", requestedFloor);
+        // this.elevatorDirection = "idle";
+        Console.WriteLine("Elevator is at destination : " + requestedFloor + "\n");
+        openDoors();
+        closeDoors();
       }
     }
     public void openDoors()
     {
-      Console.WriteLine("DOORS  : Opening the doors to Narnia");
+      Console.WriteLine("Doors opening");
     }
 
     public void closeDoors()
     {
-      Console.WriteLine("DOORS  : Closing the doors to Narnia");
+      Console.WriteLine("Doors closing");
     }
-  
+  }
 }
 
 class Program
@@ -222,29 +293,29 @@ class Program
     var totalBasement = 6;
     var RC = totalFloor - totalBasement + 1;
 
-    Controller Controller1 = new Controller(1, 4, 5, 2);
+    Controller Controller1 = new Controller(1, 4, 5, totalFloor, totalBasement);
 
     // Creation of the floor list
-    int[] floorList = new int[totalFloor];
-    for (int i = 0; i < totalBasement; i++)
-    {
-      floorList[i] = i - totalBasement + 1;
-      Console.WriteLine("Floor id (basement): " + floorList[i] + "\n");
-    }
-    for (int i = totalBasement; i == totalBasement; i++)
-    {
-      floorList[i] = i - totalBasement + 1;
-      Console.WriteLine("RC Floor: " + floorList[i] + "\n");
-    }
-    for (int i = totalBasement + 1; i < totalFloor; i++)
-    {
-      floorList[i] = i - totalBasement + 1;
-      Console.WriteLine("Floor id : " + floorList[i] + "\n");
-    }
+    // int[] floorList = new int[totalFloor];
+    // for (int i = 0; i < totalBasement; i++)
+    // {
+    //   floorList[i] = i - totalBasement + 1;
+    //   Console.WriteLine("Floor id (basement): " + floorList[i] + "\n");
+    // }
+    // for (int i = totalBasement; i == totalBasement; i++)
+    // {
+    //   floorList[i] = i - totalBasement + 1;
+    //   Console.WriteLine("RC Floor: " + floorList[i] + "\n");
+    // }
+    // for (int i = totalBasement + 1; i < totalFloor; i++)
+    // {
+    //   floorList[i] = i - totalBasement + 1;
+    //   Console.WriteLine("Floor id : " + floorList[i] + "\n");
+    // }
 
-    // ____________TESTING____________
+    // ***************TESTING***************
 
-    // ____________SCENE #1____________
+    // ***************SCENE #1***************
     // Scenario 1:
     // With second column (or column B) serving floors from 2 to 20,
     // with elevator B1 at 20th floor going to 5th,
@@ -255,39 +326,28 @@ class Program
     // someone is at 1st floor and requests the 20th floor,
     // elevator B5 is expected to be sent
     Controller1.columns[1].elevators[0].elevatorFloor = 20;
+    Controller1.columns[1].elevators[0].elevatorDirection = "down";
     Controller1.columns[1].elevators[1].elevatorFloor = 3;
+    Controller1.columns[1].elevators[1].elevatorDirection = "up";
     Controller1.columns[1].elevators[2].elevatorFloor = 13;
+    Controller1.columns[1].elevators[2].elevatorDirection = "up";
     Controller1.columns[1].elevators[3].elevatorFloor = 15;
+    Controller1.columns[1].elevators[3].elevatorDirection = "down";
     Controller1.columns[1].elevators[4].elevatorFloor = 6;
-
-    Controller1.findColumn(20);
-
+    Controller1.columns[1].elevators[4].elevatorDirection = "down";
     System.Console.WriteLine(Controller1.columns[1].elevators[0].elevatorFloor);
-
-    // ____________SCENE #2____________
-    // ____________SCENE #3____________
-    // ____________SCENE #4____________
-
-    // Controller1.findColumn(2);
-    // Controller1.findColumn(7);
-    // Controller1.findColumn(19);
-    // Controller1.findColumn(20);
-    // Controller1.findColumn(21);
-    // Controller1.findColumn(39);
-    // Controller1.findColumn(40);
-    // Controller1.findColumn(41);
-    // Controller1.findColumn(60);
+    System.Console.WriteLine(Controller1.columns[1].elevators[0].elevatorDirection);
+    Controller1.findColumn(20);
+    // Controller1.columns[1].elevators[0].moveElevator(5);
+    // Controller1.columns[1].elevators[1].moveElevator(15);
+    // Controller1.columns[1].elevators[2].moveElevator(1);
+    // Controller1.columns[1].elevators[3].moveElevator(2);
+    // Controller1.columns[1].elevators[4].moveElevator(1);
 
 
-
-
-
-
-
-
-
-
-
+    // ***************SCENE #2***************
+    // ***************SCENE #3***************
+    // ***************SCENE #4***************
 
   }
 }
