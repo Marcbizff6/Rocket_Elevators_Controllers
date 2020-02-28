@@ -18,87 +18,71 @@ namespace Rocket_Elevators_Controllers
 
       columns = new List<Column>();
 
-      //  Creating the column
+      // *************** Creating the column ***************\\
       for (var i = 0; i < nbColumn; i++)
       {
         if (i == 0)
         {
           Column column = new Column(i + 1, nbElevator, totalFloor, totalBasement);
           columns.Add(column);
-          Console.WriteLine("Column id : " + columns[i].id + "\n");
+          // Console.WriteLine("Column id : " + columns[i].id + "\n");
 
         }
         else if (i == 1)
         {
           Column column = new Column(i + 1, nbElevator, totalFloor, totalBasement);
           columns.Add(column);
-          Console.WriteLine("Column id : " + columns[i].id + "\n");
+          // Console.WriteLine("Column id : " + columns[i].id + "\n");
         }
         else if (i == 2)
         {
           Column column = new Column(i + 1, nbElevator, totalFloor, totalBasement);
           columns.Add(column);
-          Console.WriteLine("Column id : " + columns[i].id + "\n");
+          // Console.WriteLine("Column id : " + columns[i].id + "\n");
         }
         else if (i == 3)
         {
           Column column = new Column(i + 1, nbElevator, totalFloor, totalBasement);
           columns.Add(column);
-          Console.WriteLine("Column id : " + columns[i].id + "\n");
+          // Console.WriteLine("Column id : " + columns[i].id + "\n");
         }
       }
     }
 
-    // Finding the column
-    public void findColumn(int requestedFloor)
+    public Elevator assignElevator(int RequestedFloor)
     {
+      var foundColumn = findColumn(RequestedFloor);
+      var foundElevator = foundColumn.findElevator(RequestedFloor);
+      System.Console.WriteLine("assignElevator : " + foundElevator);
+      return foundElevator;
+    }
+
+    // *************** Finding the column ***************\\
+    public Column findColumn(int requestedFloor)
+    {
+      Column bestColumn = this.columns[0];
       if (requestedFloor < 1)
       {
-        System.Console.WriteLine("findColumn : " + columns[0] + " " + columns[0].id);
-        columns[0].findElevator(requestedFloor);
+        bestColumn = this.columns[0];
+        System.Console.WriteLine(this.columns[0] + " " + this.columns[0].id);
       }
       else if (requestedFloor > 1 && requestedFloor <= 20)
       {
-        System.Console.WriteLine("findColumn : " + columns[1] + " " + columns[1].id);
-        columns[1].findElevator(requestedFloor);
+        bestColumn = this.columns[1];
+        System.Console.WriteLine(this.columns[1] + " " + this.columns[1].id);
       }
       else if (requestedFloor > 20 && requestedFloor <= 40)
       {
-        System.Console.WriteLine("findColumn : " + columns[2] + " " + columns[2].id);
-        columns[2].findElevator(requestedFloor);
+        bestColumn = this.columns[2];
+        System.Console.WriteLine(this.columns[2] + " " + this.columns[2].id);
       }
       else if (requestedFloor > 40 && requestedFloor <= 60)
       {
-        System.Console.WriteLine("findColumn : " + columns[3] + " " + columns[3].id);
-        columns[3].findElevator(requestedFloor);
+        bestColumn = this.columns[3];
+        System.Console.WriteLine(this.columns[3] + " " + this.columns[3].id);
       }
-      // else if (requestedFloor == 1)
-      // {
-      //   System.Console.WriteLine("findColumn : " + columns[2].id);
-      //   columns[3].findElevator(requestedFloor);
-      // }
-      // System.Console.WriteLine("end of requestedFloor # : " + requestedFloor + "\n");
+      return bestColumn;
     }
-
-    // public Elevator RequestElevator(int FloorNumber, string Direction)
-    // {
-    //   Column bestColumn = null;
-    //   if (user.Position == 1)
-    //   {
-    //     bestColumn = findColumn(user.RequestedFloor);
-    //   }
-    //   else
-    //   {
-    //     bestColumn = findColumn(user.Position);
-    //   }
-    //   Elevator bestElevator = bestColumn.findElevator(FloorNumber, Direction);
-    //   bestElevator.moveElevator(FloorNumber);
-    //   return bestElevator;
-    // }
-    // public void AssignElevator(int RequestedFloor, Elevator bestElevator)
-    // {
-    //   bestElevator.moveElevator(RequestedFloor);
-    // }
   }
 
   class Column
@@ -120,7 +104,7 @@ namespace Rocket_Elevators_Controllers
       elevators = new List<Elevator>();
       floors = new List<Floor>();
 
-      // creating the elevators
+      // *************** creating the elevators ***************\\
       for (var i = 0; i < nbElevator; i++)
       {
         Elevator elevator = new Elevator(i + 1, 1, "idle");
@@ -129,84 +113,412 @@ namespace Rocket_Elevators_Controllers
       }
 
       //*************** Creation of the floor list ***************\\
-      // Setting the id and the direction of each floor
+      // *************** Setting the id and the direction of each floor ***************\\
 
       for (var i = 0; i < totalBasement; i++)
       {
         Floor floor = new Floor(i - totalBasement + 1, "up");
         floors.Add(floor);
-        System.Console.WriteLine("Floor id : " + floors[i].id);
-        System.Console.WriteLine("Floor direction : " + floors[i].floorDirection);
+        // System.Console.WriteLine("Floor id : " + floors[i].id + ", Floor direction : " + floors[i].floorDirection);
       }
 
       for (var i = totalBasement; i == totalBasement; i++)
       {
         Floor floor = new Floor(i - totalBasement + 1, "idle");
         floors.Add(floor);
-        System.Console.WriteLine("Floor id : " + floors[i].id);
-        System.Console.WriteLine("Floor direction : " + floors[i].floorDirection);
+        // System.Console.WriteLine("Floor id : " + floors[i].id + ", Floor direction : " + floors[i].floorDirection);
       }
 
       for (var i = totalBasement + 1; i < totalFloor; i++)
       {
         Floor floor = new Floor(i - totalBasement + 1, "down");
         floors.Add(floor);
-        System.Console.WriteLine("Floor id : " + floors[i].id);
-        System.Console.WriteLine("Floor direction : " + floors[i].floorDirection);
       }
-      // for (int i = 0; i < totalBasement; i++)
-      // {
-      //   floorList[i] = i - totalBasement + 1;
-      //   Console.WriteLine("Floor id (basement): " + floorList[i] + "\n");
-      // }
-      // for (int i = totalBasement; i == totalBasement; i++)
-      // {
-      //   floorList[i] = i - totalBasement + 1;
-      //   Console.WriteLine("RC Floor: " + floorList[i] + "\n");
-      // }
-      // for (int i = totalBasement + 1; i < totalFloor; i++)
-      // {
-      //   floorList[i] = i - totalBasement + 1;
-      //   Console.WriteLine("Floor id : " + floorList[i] + "\n");
-      // }
     }
 
 
-    // Find the best elevator
-    public void findElevator(int requestedFloor)
+    // *************** Find the best elevator ***************\\
+    public Elevator findElevator(int requestedFloor) // object column à ajouter
     {
       int bestScore = 9999;
-      // var bestElevator = 9999;
+      Elevator bestElevator = null;
+      int userFloor = 1;
+
+      if (requestedFloor < 1)
+      {
+        userFloor = 1;
+      }
+      else if (requestedFloor > 1)
+      {
+        userFloor = 1;
+      }
+      else
+      {
+        userFloor = requestedFloor;
+      }
+
       var gap = 9999;
       foreach (Elevator elevator in this.elevators)
       {
-        if (elevator.elevatorFloor == requestedFloor)
+
+        // *************** User is on the RC floor ***************\\
+
+        // *************** The elevator is on the same floor as the user ***************\\
+
+        if (userFloor == 1 && elevator.elevatorFloor == userFloor && elevator.elevatorDirection == "up")
         {
-          gap = Math.Abs(elevator.elevatorFloor - requestedFloor);
+          gap = Math.Abs(elevator.elevatorFloor - userFloor);
           elevator.score = 100 + gap;
           System.Console.WriteLine("Elevator score : " + elevator.score);
-          if (elevator.score < bestScore) { bestScore = elevator.score; }
+          if (elevator.score < bestScore)
+          {
+            bestScore = elevator.score;
+            bestElevator = elevator;
+          }
+          System.Console.WriteLine("bestScore : " + bestScore + "\n");
         }
-        else if (elevator.elevatorFloor != requestedFloor)
+        else if (userFloor == 1 && elevator.elevatorFloor == userFloor && elevator.elevatorDirection == "down")
         {
-          gap = Math.Abs(elevator.elevatorFloor - requestedFloor);
+          gap = Math.Abs(elevator.elevatorFloor - userFloor);
+          elevator.score = 120 + gap;
+          System.Console.WriteLine("Elevator score : " + elevator.score);
+          if (elevator.score < bestScore)
+          {
+            bestScore = elevator.score;
+            bestElevator = elevator;
+          }
+          System.Console.WriteLine("bestScore : " + bestScore + "\n");
+        }
+        else if (userFloor == 1 && elevator.elevatorFloor == userFloor && elevator.elevatorDirection == "idle")
+        {
+          gap = Math.Abs(elevator.elevatorFloor - userFloor);
+          elevator.score = 140 + gap;
+          System.Console.WriteLine("Elevator score : " + elevator.score);
+          if (elevator.score < bestScore)
+          {
+            bestScore = elevator.score;
+            bestElevator = elevator;
+          }
+          System.Console.WriteLine("bestScore : " + bestScore + "\n");
+        }
+
+        // *************** The elevator is under the user floor ***************\\
+
+        else if (userFloor == 1 && elevator.elevatorFloor < userFloor && elevator.elevatorDirection == "up")
+        {
+          gap = Math.Abs(elevator.elevatorFloor - userFloor);
+          elevator.score = 160 + gap;
+          System.Console.WriteLine("Elevator score : " + elevator.score);
+          if (elevator.score < bestScore)
+          {
+            bestScore = elevator.score;
+            bestElevator = elevator;
+          }
+          System.Console.WriteLine("bestScore : " + bestScore + "\n");
+        }
+        else if (userFloor == 1 && elevator.elevatorFloor < userFloor && elevator.elevatorDirection == "idle")
+        {
+          gap = Math.Abs(elevator.elevatorFloor - userFloor);
+          elevator.score = 180 + gap;
+          System.Console.WriteLine("Elevator score : " + elevator.score);
+          if (elevator.score < bestScore)
+          {
+            bestScore = elevator.score;
+            bestElevator = elevator;
+          }
+          System.Console.WriteLine("bestScore : " + bestScore + "\n");
+        }
+        else if (userFloor == 1 && elevator.elevatorFloor < userFloor && elevator.elevatorDirection == "down")
+        {
+          gap = Math.Abs(elevator.elevatorFloor - userFloor);
           elevator.score = 200 + gap;
           System.Console.WriteLine("Elevator score : " + elevator.score);
-          if (elevator.score < bestScore) { bestScore = elevator.score; }
+          if (elevator.score < bestScore)
+          {
+            bestScore = elevator.score;
+            bestElevator = elevator;
+          }
+          System.Console.WriteLine("bestScore : " + bestScore + "\n");
         }
-        else if (elevator.elevatorFloor != requestedFloor && elevator.elevatorDirection == "down")
+
+        // *************** The elevator is above the user floor ***************\\
+
+        else if (userFloor == 1 && elevator.elevatorFloor > userFloor && elevator.elevatorDirection == "down")
         {
-          gap = Math.Abs(elevator.elevatorFloor - requestedFloor);
-          elevator.score = 200 + gap;
+          gap = Math.Abs(elevator.elevatorFloor - userFloor);
+          elevator.score = 220 + gap;
           System.Console.WriteLine("Elevator score : " + elevator.score);
-          if (elevator.score < bestScore) { bestScore = elevator.score; }
+          if (elevator.score < bestScore)
+          {
+            bestScore = elevator.score;
+            bestElevator = elevator;
+          }
+          System.Console.WriteLine("bestScore : " + bestScore + "\n");
         }
-        else if (elevator.elevatorFloor == requestedFloor)
+        else if (userFloor == 1 && elevator.elevatorFloor > userFloor && elevator.elevatorDirection == "idle")
         {
-          System.Console.WriteLine("No result\n");
+          gap = Math.Abs(elevator.elevatorFloor - userFloor);
+          elevator.score = 240 + gap;
+          System.Console.WriteLine("Elevator score : " + elevator.score);
+          if (elevator.score < bestScore)
+          {
+            bestScore = elevator.score;
+            bestElevator = elevator;
+          }
+          System.Console.WriteLine("bestScore : " + bestScore + "\n");
         }
-        System.Console.WriteLine("If #final Best score : " + bestScore + "\n");
+        else if (userFloor == 1 && elevator.elevatorFloor > userFloor && elevator.elevatorDirection == "up")
+        {
+          gap = Math.Abs(elevator.elevatorFloor - userFloor);
+          elevator.score = 260 + gap;
+          System.Console.WriteLine("Elevator score : " + elevator.score);
+          if (elevator.score < bestScore)
+          {
+            bestScore = elevator.score;
+            bestElevator = elevator;
+          }
+          System.Console.WriteLine("bestScore : " + bestScore + "\n");
+        }
+
+        // *************** User is under the RC floor ***************\\
+
+        // *************** The elevator is on the same floor as the user ***************\\
+
+        else if (userFloor < 1 && elevator.elevatorFloor == userFloor && elevator.elevatorDirection == "up")
+        {
+          gap = Math.Abs(elevator.elevatorFloor - userFloor);
+          elevator.score = 280 + gap;
+          System.Console.WriteLine("Elevator score : " + elevator.score);
+          if (elevator.score < bestScore)
+          {
+            bestScore = elevator.score;
+            bestElevator = elevator;
+          }
+          System.Console.WriteLine("bestScore : " + bestScore + "\n");
+        }
+        else if (userFloor < 1 && elevator.elevatorFloor == userFloor && elevator.elevatorDirection == "idle")
+        {
+          gap = Math.Abs(elevator.elevatorFloor - userFloor);
+          elevator.score = 300 + gap;
+          System.Console.WriteLine("Elevator score : " + elevator.score);
+          if (elevator.score < bestScore)
+          {
+            bestScore = elevator.score;
+            bestElevator = elevator;
+          }
+          System.Console.WriteLine("bestScore : " + bestScore + "\n");
+        }
+        else if (userFloor < 1 && elevator.elevatorFloor == userFloor && elevator.elevatorDirection == "down")
+        {
+          gap = Math.Abs(elevator.elevatorFloor - userFloor);
+          elevator.score = 320 + gap;
+          System.Console.WriteLine("Elevator score : " + elevator.score);
+          if (elevator.score < bestScore)
+          {
+            bestScore = elevator.score;
+            bestElevator = elevator;
+          }
+          System.Console.WriteLine("bestScore : " + bestScore + "\n");
+        }
+
+        // *************** The elevator is under the user floor ***************\\
+
+        else if (userFloor < 1 && elevator.elevatorFloor < userFloor && elevator.elevatorDirection == "up")
+        {
+          gap = Math.Abs(elevator.elevatorFloor - userFloor);
+          elevator.score = 340 + gap;
+          System.Console.WriteLine("Elevator score : " + elevator.score);
+          if (elevator.score < bestScore)
+          {
+            bestScore = elevator.score;
+            bestElevator = elevator;
+          }
+          System.Console.WriteLine("bestScore : " + bestScore + "\n");
+        }
+        else if (userFloor < 1 && elevator.elevatorFloor < userFloor && elevator.elevatorDirection == "idle")
+        {
+          gap = Math.Abs(elevator.elevatorFloor - userFloor);
+          elevator.score = 360 + gap;
+          System.Console.WriteLine("Elevator score : " + elevator.score);
+          if (elevator.score < bestScore)
+          {
+            bestScore = elevator.score;
+            bestElevator = elevator;
+          }
+          System.Console.WriteLine("bestScore : " + bestScore + "\n");
+        }
+        else if (userFloor < 1 && elevator.elevatorFloor < userFloor && elevator.elevatorDirection == "down")
+        {
+          gap = Math.Abs(elevator.elevatorFloor - userFloor);
+          elevator.score = 380 + gap;
+          System.Console.WriteLine("Elevator score : " + elevator.score);
+          if (elevator.score < bestScore)
+          {
+            bestScore = elevator.score;
+            bestElevator = elevator;
+          }
+          System.Console.WriteLine("bestScore : " + bestScore + "\n");
+        }
+
+        // *************** The elevator is above the user floor ***************\\
+
+        else if (userFloor < 1 && elevator.elevatorFloor > userFloor && elevator.elevatorDirection == "idle")
+        {
+          gap = Math.Abs(elevator.elevatorFloor - userFloor);
+          elevator.score = 400 + gap;
+          System.Console.WriteLine("Elevator score : " + elevator.score);
+          if (elevator.score < bestScore)
+          {
+            bestScore = elevator.score;
+            bestElevator = elevator;
+          }
+          System.Console.WriteLine("bestScore : " + bestScore + "\n");
+        }
+        else if (userFloor < 1 && elevator.elevatorFloor > userFloor && elevator.elevatorDirection == "down")
+        {
+          gap = Math.Abs(elevator.elevatorFloor - userFloor);
+          elevator.score = 420 + gap;
+          System.Console.WriteLine("Elevator score : " + elevator.score);
+          if (elevator.score < bestScore)
+          {
+            bestScore = elevator.score;
+            bestElevator = elevator;
+          }
+          System.Console.WriteLine("bestScore : " + bestScore + "\n");
+        }
+        else if (userFloor < 1 && elevator.elevatorFloor > userFloor && elevator.elevatorDirection == "up")
+        {
+          gap = Math.Abs(elevator.elevatorFloor - userFloor);
+          elevator.score = 440 + gap;
+          System.Console.WriteLine("Elevator score : " + elevator.score);
+          if (elevator.score < bestScore)
+          {
+            bestScore = elevator.score;
+            bestElevator = elevator;
+          }
+          System.Console.WriteLine("bestScore : " + bestScore + "\n");
+        }
+
+        // *************** User is above the RC floor ***************\\
+
+        // *************** The elevator is on the same floor as the user ***************\\
+
+        else if (userFloor > 1 && elevator.elevatorFloor == userFloor && elevator.elevatorDirection == "down")
+        {
+          gap = Math.Abs(elevator.elevatorFloor - userFloor);
+          elevator.score = 460 + gap;
+          System.Console.WriteLine("Elevator score : " + elevator.score);
+          if (elevator.score < bestScore)
+          {
+            bestScore = elevator.score;
+            bestElevator = elevator;
+          }
+          System.Console.WriteLine("bestScore : " + bestScore + "\n");
+        }
+        else if (userFloor > 1 && elevator.elevatorFloor == userFloor && elevator.elevatorDirection == "idle")
+        {
+          gap = Math.Abs(elevator.elevatorFloor - userFloor);
+          elevator.score = 480 + gap;
+          System.Console.WriteLine("Elevator score : " + elevator.score);
+          if (elevator.score < bestScore)
+          {
+            bestScore = elevator.score;
+            bestElevator = elevator;
+          }
+          System.Console.WriteLine("bestScore : " + bestScore + "\n");
+        }
+        else if (userFloor > 1 && elevator.elevatorFloor == userFloor && elevator.elevatorDirection == "up")
+        {
+          gap = Math.Abs(elevator.elevatorFloor - userFloor);
+          elevator.score = 500 + gap;
+          System.Console.WriteLine("Elevator score : " + elevator.score);
+          if (elevator.score < bestScore)
+          {
+            bestScore = elevator.score;
+            bestElevator = elevator;
+          }
+          System.Console.WriteLine("bestScore : " + bestScore + "\n");
+        }
+
+        // *************** The elevator is under the user floor ***************\\
+
+        else if (userFloor > 1 && elevator.elevatorFloor < userFloor && elevator.elevatorDirection == "idle")
+        {
+          gap = Math.Abs(elevator.elevatorFloor - userFloor);
+          elevator.score = 520 + gap;
+          System.Console.WriteLine("Elevator score : " + elevator.score);
+          if (elevator.score < bestScore)
+          {
+            bestScore = elevator.score;
+            bestElevator = elevator;
+          }
+          System.Console.WriteLine("bestScore : " + bestScore + "\n");
+        }
+        else if (userFloor > 1 && elevator.elevatorFloor < userFloor && elevator.elevatorDirection == "up")
+        {
+          gap = Math.Abs(elevator.elevatorFloor - userFloor);
+          elevator.score = 540 + gap;
+          System.Console.WriteLine("Elevator score : " + elevator.score);
+          if (elevator.score < bestScore)
+          {
+            bestScore = elevator.score;
+            bestElevator = elevator;
+          }
+          System.Console.WriteLine("bestScore : " + bestScore + "\n");
+        }
+        else if (userFloor > 1 && elevator.elevatorFloor < userFloor && elevator.elevatorDirection == "down")
+        {
+          gap = Math.Abs(elevator.elevatorFloor - userFloor);
+          elevator.score = 560 + gap;
+          System.Console.WriteLine("Elevator score : " + elevator.score);
+          if (elevator.score < bestScore)
+          {
+            bestScore = elevator.score;
+            bestElevator = elevator;
+          }
+          System.Console.WriteLine("bestScore : " + bestScore + "\n");
+        }
+
+        // *************** The elevator is above the user floor ***************\\
+
+        else if (userFloor > 1 && elevator.elevatorFloor > userFloor && elevator.elevatorDirection == "down")
+        {
+          gap = Math.Abs(elevator.elevatorFloor - userFloor);
+          elevator.score = 300 + gap;
+          System.Console.WriteLine("Elevator score : " + elevator.score);
+          if (elevator.score < bestScore)
+          {
+            bestScore = elevator.score;
+            bestElevator = elevator;
+          }
+          System.Console.WriteLine("bestScore : " + bestScore + "\n");
+        }
+        else if (userFloor > 1 && elevator.elevatorFloor > userFloor && elevator.elevatorDirection == "idle")
+        {
+          gap = Math.Abs(elevator.elevatorFloor - userFloor);
+          elevator.score = 300 + gap;
+          System.Console.WriteLine("Elevator score : " + elevator.score);
+          if (elevator.score < bestScore)
+          {
+            bestScore = elevator.score;
+            bestElevator = elevator;
+          }
+          System.Console.WriteLine("bestScore : " + bestScore + "\n");
+        }
+        else if (userFloor > 1 && elevator.elevatorFloor > userFloor && elevator.elevatorDirection == "up")
+        {
+          gap = Math.Abs(elevator.elevatorFloor - userFloor);
+          elevator.score = 300 + gap;
+          System.Console.WriteLine("Elevator score : " + elevator.score);
+          if (elevator.score < bestScore)
+          {
+            bestScore = elevator.score;
+            bestElevator = elevator;
+          }
+          System.Console.WriteLine("bestScore : " + bestScore + "\n");
+        }
       }
+      return bestElevator;
     }
   }
 
@@ -236,10 +548,10 @@ namespace Rocket_Elevators_Controllers
       this.elevatorDirection = elevatorDirection;
     }
 
-    // Moving elevator
+    // *************** Moving elevator ***************\\
     public void moveElevator(int requestedFloor)
     {
-      // Move up
+      // *************** Move up ***************\\
       if (this.elevatorFloor < requestedFloor)
       {
         this.elevatorDirection = "up";
@@ -251,7 +563,7 @@ namespace Rocket_Elevators_Controllers
         }
       }
 
-      // Moving down
+      // *************** Move down ***************\\
       if (this.elevatorFloor > requestedFloor)
       {
         this.elevatorDirection = "down";
@@ -263,7 +575,7 @@ namespace Rocket_Elevators_Controllers
         }
       }
 
-      // At the current floor
+      // *************** At the current floor ***************\\
       if (this.elevatorFloor == requestedFloor)
       {
         // this.elevatorDirection = "idle";
@@ -282,74 +594,79 @@ namespace Rocket_Elevators_Controllers
       Console.WriteLine("Doors closing");
     }
   }
-}
 
-class Program
-{
-  static void Main(string[] args)
+
+  class Program
   {
+    static void Main(string[] args)
+    {
+      {
+        var totalFloor = 66;
+        var totalBasement = 6;
+        var RC = totalFloor - totalBasement + 1;
 
-    var totalFloor = 66;
-    var totalBasement = 6;
-    var RC = totalFloor - totalBasement + 1;
+        Controller Controller1 = new Controller(1, 4, 5, totalFloor, totalBasement);
 
-    Controller Controller1 = new Controller(1, 4, 5, totalFloor, totalBasement);
+        // Creation of the floor list
+        // int[] floorList = new int[totalFloor];
+        // for (int i = 0; i < totalBasement; i++)
+        // {
+        //   floorList[i] = i - totalBasement + 1;
+        //   Console.WriteLine("Floor id (basement): " + floorList[i] + "\n");
+        // }
+        // for (int i = totalBasement; i == totalBasement; i++)
+        // {
+        //   floorList[i] = i - totalBasement + 1;
+        //   Console.WriteLine("RC Floor: " + floorList[i] + "\n");
+        // }
+        // for (int i = totalBasement + 1; i < totalFloor; i++)
+        // {
+        //   floorList[i] = i - totalBasement + 1;
+        //   Console.WriteLine("Floor id : " + floorList[i] + "\n");
+        // }
 
-    // Creation of the floor list
-    // int[] floorList = new int[totalFloor];
-    // for (int i = 0; i < totalBasement; i++)
-    // {
-    //   floorList[i] = i - totalBasement + 1;
-    //   Console.WriteLine("Floor id (basement): " + floorList[i] + "\n");
-    // }
-    // for (int i = totalBasement; i == totalBasement; i++)
-    // {
-    //   floorList[i] = i - totalBasement + 1;
-    //   Console.WriteLine("RC Floor: " + floorList[i] + "\n");
-    // }
-    // for (int i = totalBasement + 1; i < totalFloor; i++)
-    // {
-    //   floorList[i] = i - totalBasement + 1;
-    //   Console.WriteLine("Floor id : " + floorList[i] + "\n");
-    // }
+        // *************** TESTING ***************\\
 
-    // ***************TESTING***************
-
-    // ***************SCENE #1***************
-    // Scenario 1:
-    // With second column (or column B) serving floors from 2 to 20,
-    // with elevator B1 at 20th floor going to 5th,
-    // B2 at 3rd floor going to 15th,
-    // B3 at 13th floor going to 1st,
-    // B4 at 15th floor going to 2nd,
-    // and B5 at 6th floor going to 1st,
-    // someone is at 1st floor and requests the 20th floor,
-    // elevator B5 is expected to be sent
-    Controller1.columns[1].elevators[0].elevatorFloor = 20;
-    Controller1.columns[1].elevators[0].elevatorDirection = "down";
-    Controller1.columns[1].elevators[1].elevatorFloor = 3;
-    Controller1.columns[1].elevators[1].elevatorDirection = "up";
-    Controller1.columns[1].elevators[2].elevatorFloor = 13;
-    Controller1.columns[1].elevators[2].elevatorDirection = "up";
-    Controller1.columns[1].elevators[3].elevatorFloor = 15;
-    Controller1.columns[1].elevators[3].elevatorDirection = "down";
-    Controller1.columns[1].elevators[4].elevatorFloor = 6;
-    Controller1.columns[1].elevators[4].elevatorDirection = "down";
-    System.Console.WriteLine(Controller1.columns[1].elevators[0].elevatorFloor);
-    System.Console.WriteLine(Controller1.columns[1].elevators[0].elevatorDirection);
-    Controller1.findColumn(20);
-    // Controller1.columns[1].elevators[0].moveElevator(5);
-    // Controller1.columns[1].elevators[1].moveElevator(15);
-    // Controller1.columns[1].elevators[2].moveElevator(1);
-    // Controller1.columns[1].elevators[3].moveElevator(2);
-    // Controller1.columns[1].elevators[4].moveElevator(1);
+        // *************** SCENE #1 ***************\\
+        // Scenario 1:
+        // With second column (or column B) serving floors from 2 to 20,
+        // with elevator B1 at 20th floor going to 5th,
+        // B2 at 3rd floor going to 15th,
+        // B3 at 13th floor going to 1st,
+        // B4 at 15th floor going to 2nd,
+        // and B5 at 6th floor going to 1st,
+        // someone is at 1st floor and requests the 20th floor,
+        // elevator B5 is expected to be sent
+        Controller1.columns[1].elevators[0].elevatorFloor = 20;
+        Controller1.columns[1].elevators[0].elevatorDirection = "down";
+        Controller1.columns[1].elevators[1].elevatorFloor = 3;
+        Controller1.columns[1].elevators[1].elevatorDirection = "up";
+        Controller1.columns[1].elevators[2].elevatorFloor = 13;
+        Controller1.columns[1].elevators[2].elevatorDirection = "down";
+        Controller1.columns[1].elevators[3].elevatorFloor = 15;
+        Controller1.columns[1].elevators[3].elevatorDirection = "down";
+        Controller1.columns[1].elevators[4].elevatorFloor = 6;
+        Controller1.columns[1].elevators[4].elevatorDirection = "down";
+        Controller1.assignElevator(20);
 
 
-    // ***************SCENE #2***************
-    // ***************SCENE #3***************
-    // ***************SCENE #4***************
+        // *************** SCENE #2 ***************\\
 
+        Controller1.columns[1].elevators[0].elevatorFloor = 20;
+        Controller1.columns[1].elevators[0].elevatorDirection = "down";
+        Controller1.columns[1].elevators[1].elevatorFloor = 3;
+        Controller1.columns[1].elevators[1].elevatorDirection = "up";
+        Controller1.columns[1].elevators[2].elevatorFloor = 13;
+        Controller1.columns[1].elevators[2].elevatorDirection = "down";
+        Controller1.columns[1].elevators[3].elevatorFloor = 15;
+        Controller1.columns[1].elevators[3].elevatorDirection = "down";
+        Controller1.columns[1].elevators[4].elevatorFloor = 6;
+        Controller1.columns[1].elevators[4].elevatorDirection = "down";
+        
+        // *************** SCENE #3 ***************\\
+        // *************** SCENE #4 ***************\\
+
+      }
+    }
   }
 }
-}
-
