@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 // package Go
 
 // "math"
@@ -17,7 +19,7 @@ type column struct {
 	totalFloor    int
 	totalBasement int
 	elevatorList  []elevator
-	floorList     []floors
+	floorList     []int
 }
 
 type elevator struct {
@@ -35,8 +37,6 @@ type floors struct {
 func newController(nbElevator, totalFloor, numberOfColumn, totalBasement int) *controller {
 	controller1 := controller{}
 	controller1.numberOfColumn = numberOfColumn
-	elevatorsPerColumn := nbElevator / numberOfColumn
-	floorsPerColumn := totalFloor / (numberOfColumn - 1)
 
 	// *************** CREATING COLUMN ***************
 	for i := 1; i <= numberOfColumn; i++ {
@@ -45,17 +45,17 @@ func newController(nbElevator, totalFloor, numberOfColumn, totalBasement int) *c
 			elevatorList: []elevator{},
 			floorList:    []int{}}
 
-		{
-			return
-		}
 	}
-
+	return &controller1
+}
 func main() {
 
-	// var elevatorNumbersTotal = 20
+	// var totalFloor = 20
 	// var numberFloorsTotal = 60
 	// var numberOfBasement = 6
 	// var numberColumn = 4
+
+	controller1 := newController(1, 2, 3, 4)
 
 	fmt.Println("hello worl")
 }
