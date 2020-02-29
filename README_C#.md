@@ -36,13 +36,13 @@ This is the best score                      bestScore : 303
                                             Elevator score : 422
                                             bestScore : 303
 
-The best elevator + is direction            Rocket_Elevators_Controllers.Elevator id # : 4 going down 
+The best elevator id                        Rocket_Elevators_Controllers.Elevator id # : 4 
 
-                                            Elevator going : up
-                                            Elevator going : -4
-                                            Elevator going : -3
-                                            Elevator going : -2
-                                            Elevator is at destination : -2
+The best elevator direction                 Elevator going : up
+Moving to floor -4 (B5)                     Elevator going : -4
+Moving to floor -3 (B4)                     Elevator going : -3
+Moving to floor -2 (B3)                     Elevator going : -2
+The elevator pick up the user               Elevator is at destination : -2
 
                                             Doors opening
                                             Doors closing
@@ -51,7 +51,7 @@ The best elevator + is direction            Rocket_Elevators_Controllers.Elevato
 
                                             Rocket_Elevators_Controllers.Elevator id # : 4 going down 
 
-                                            Elevator going : up
+It now lift the user to his destination     Elevator going : up
                                             Elevator going : -1
                                             Elevator going : 0
                                             Elevator going : 1
