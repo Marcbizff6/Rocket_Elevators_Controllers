@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO.Enumeration;
+// using System.IO.Enumeration;
 
 namespace Rocket_Elevators_Controllers
 {
@@ -63,10 +63,9 @@ namespace Rocket_Elevators_Controllers
     {
       var foundColumn = findColumn(RequestedFloor);
       var foundElevator = foundColumn.findElevator(RequestedFloor);
-      // System.Console.WriteLine("assignElevator : " + foundElevator + " id # : " + foundElevator.id + "\n");
-      System.Console.WriteLine(foundElevator + " id # : " + foundElevator.id + " going down \n");
+      System.Console.WriteLine(foundElevator + " id # : " + foundElevator.id + " \n");
       foundElevator.moveElevator(RequestedFloor);
-      System.Console.WriteLine(foundElevator + " id # : " + foundElevator.id + " going down \n");
+      System.Console.WriteLine(foundElevator + " id # : " + foundElevator.id + " \n");
       foundElevator.moveElevator(1);
       return foundElevator;
     }
