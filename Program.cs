@@ -56,6 +56,8 @@ namespace Rocket_Elevators_Controllers
       var foundElevator = foundColumn.findElevator(destinationFloor);
       System.Console.WriteLine("assignElevator : " + foundElevator + " id # : " + foundElevator.id + "\n");
       foundElevator.moveElevator(destinationFloor);
+      System.Console.WriteLine("assignElevator : " + foundElevator + " id # : " + foundElevator.id + "\n");
+      foundElevator.moveElevator(RequestedFloor);
       return foundElevator;
     }
 
