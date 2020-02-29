@@ -51,9 +51,23 @@ namespace Rocket_Elevators_Controllers
 
     public Elevator assignElevator(int RequestedFloor)
     {
+      var destinationFloor = 1;
+      var foundColumn = findColumn(RequestedFloor);
+      var foundElevator = foundColumn.findElevator(destinationFloor);
+      System.Console.WriteLine("assignElevator : " + foundElevator + " id # : " + foundElevator.id + "\n");
+      foundElevator.moveElevator(destinationFloor);
+      return foundElevator;
+    }
+
+    public Elevator RequestElevator(int RequestedFloor)
+    {
       var foundColumn = findColumn(RequestedFloor);
       var foundElevator = foundColumn.findElevator(RequestedFloor);
-      System.Console.WriteLine("assignElevator : " + foundElevator);
+      // System.Console.WriteLine("assignElevator : " + foundElevator + " id # : " + foundElevator.id + "\n");
+      System.Console.WriteLine(foundElevator + " id # : " + foundElevator.id + " going down \n");
+      foundElevator.moveElevator(RequestedFloor);
+      System.Console.WriteLine(foundElevator + " id # : " + foundElevator.id + " going down \n");
+      foundElevator.moveElevator(1);
       return foundElevator;
     }
 
@@ -64,21 +78,25 @@ namespace Rocket_Elevators_Controllers
       if (requestedFloor < 1)
       {
         bestColumn = this.columns[0];
+        System.Console.WriteLine("*********************************************");
         System.Console.WriteLine(this.columns[0] + " " + this.columns[0].id);
       }
       else if (requestedFloor > 1 && requestedFloor <= 20)
       {
         bestColumn = this.columns[1];
+        System.Console.WriteLine("*********************************************");
         System.Console.WriteLine(this.columns[1] + " " + this.columns[1].id);
       }
       else if (requestedFloor > 20 && requestedFloor <= 40)
       {
         bestColumn = this.columns[2];
+        System.Console.WriteLine("*********************************************");
         System.Console.WriteLine(this.columns[2] + " " + this.columns[2].id);
       }
       else if (requestedFloor > 40 && requestedFloor <= 60)
       {
         bestColumn = this.columns[3];
+        System.Console.WriteLine("*********************************************");
         System.Console.WriteLine(this.columns[3] + " " + this.columns[3].id);
       }
       return bestColumn;
@@ -138,19 +156,15 @@ namespace Rocket_Elevators_Controllers
 
 
     // *************** Find the best elevator ***************\\
-    public Elevator findElevator(int requestedFloor) // object column à ajouter
+    public Elevator findElevator(int requestedFloor)
     {
       int bestScore = 9999;
       Elevator bestElevator = null;
       int userFloor = 1;
 
-      if (requestedFloor < 1)
+      if (requestedFloor != 1)
       {
-        userFloor = 1;
-      }
-      else if (requestedFloor > 1)
-      {
-        userFloor = 1;
+        userFloor = requestedFloor;
       }
       else
       {
@@ -282,8 +296,6 @@ namespace Rocket_Elevators_Controllers
 
         // *************** User is under the RC floor ***************\\
 
-        // *************** The elevator is on the same floor as the user ***************\\
-
         else if (userFloor < 1 && elevator.elevatorFloor == userFloor && elevator.elevatorDirection == "up")
         {
           gap = Math.Abs(elevator.elevatorFloor - userFloor);
@@ -296,7 +308,7 @@ namespace Rocket_Elevators_Controllers
           }
           System.Console.WriteLine("bestScore : " + bestScore + "\n");
         }
-        else if (userFloor < 1 && elevator.elevatorFloor == userFloor && elevator.elevatorDirection == "idle")
+        else if (userFloor < 1 && elevator.elevatorFloor < userFloor && elevator.elevatorDirection == "up")
         {
           gap = Math.Abs(elevator.elevatorFloor - userFloor);
           elevator.score = 300 + gap;
@@ -308,7 +320,7 @@ namespace Rocket_Elevators_Controllers
           }
           System.Console.WriteLine("bestScore : " + bestScore + "\n");
         }
-        else if (userFloor < 1 && elevator.elevatorFloor == userFloor && elevator.elevatorDirection == "down")
+        else if (userFloor < 1 && elevator.elevatorFloor == userFloor && elevator.elevatorDirection == "idle")
         {
           gap = Math.Abs(elevator.elevatorFloor - userFloor);
           elevator.score = 320 + gap;
@@ -320,10 +332,7 @@ namespace Rocket_Elevators_Controllers
           }
           System.Console.WriteLine("bestScore : " + bestScore + "\n");
         }
-
-        // *************** The elevator is under the user floor ***************\\
-
-        else if (userFloor < 1 && elevator.elevatorFloor < userFloor && elevator.elevatorDirection == "up")
+        else if (userFloor < 1 && elevator.elevatorFloor == userFloor && elevator.elevatorDirection == "down")
         {
           gap = Math.Abs(elevator.elevatorFloor - userFloor);
           elevator.score = 340 + gap;
@@ -335,6 +344,7 @@ namespace Rocket_Elevators_Controllers
           }
           System.Console.WriteLine("bestScore : " + bestScore + "\n");
         }
+
         else if (userFloor < 1 && elevator.elevatorFloor < userFloor && elevator.elevatorDirection == "idle")
         {
           gap = Math.Abs(elevator.elevatorFloor - userFloor);
@@ -359,8 +369,6 @@ namespace Rocket_Elevators_Controllers
           }
           System.Console.WriteLine("bestScore : " + bestScore + "\n");
         }
-
-        // *************** The elevator is above the user floor ***************\\
 
         else if (userFloor < 1 && elevator.elevatorFloor > userFloor && elevator.elevatorDirection == "idle")
         {
@@ -591,7 +599,8 @@ namespace Rocket_Elevators_Controllers
 
     public void closeDoors()
     {
-      Console.WriteLine("Doors closing");
+      Console.WriteLine("Doors closing\n");
+      Console.WriteLine("*********************************************\n");
     }
   }
 
@@ -647,25 +656,92 @@ namespace Rocket_Elevators_Controllers
         Controller1.columns[1].elevators[3].elevatorDirection = "down";
         Controller1.columns[1].elevators[4].elevatorFloor = 6;
         Controller1.columns[1].elevators[4].elevatorDirection = "down";
+        System.Console.WriteLine("SCENARIO 1");
         Controller1.assignElevator(20);
 
 
         // *************** SCENE #2 ***************\\
+        // Scenario 2:
+        // With third column(or column C) serving floors from 21 to 40,
+        // with elevator C1 at 1st floor going to 21th,
+        // C2 at 23st floor going to 28th,
+        // C3 at 33rd floor going to 1st,
+        // C4 at 40th floor going to 24th,
+        // and C5 at 39nd floor going to 1st,
+        // someone is at 1st floor and requests the 36th floor,
+        // elevator C1 is expected to be sent
 
-        Controller1.columns[1].elevators[0].elevatorFloor = 20;
-        Controller1.columns[1].elevators[0].elevatorDirection = "down";
-        Controller1.columns[1].elevators[1].elevatorFloor = 3;
-        Controller1.columns[1].elevators[1].elevatorDirection = "up";
-        Controller1.columns[1].elevators[2].elevatorFloor = 13;
-        Controller1.columns[1].elevators[2].elevatorDirection = "down";
-        Controller1.columns[1].elevators[3].elevatorFloor = 15;
-        Controller1.columns[1].elevators[3].elevatorDirection = "down";
-        Controller1.columns[1].elevators[4].elevatorFloor = 6;
-        Controller1.columns[1].elevators[4].elevatorDirection = "down";
-        
+        Controller1.columns[2].elevators[0].elevatorFloor = 1;
+        Controller1.columns[2].elevators[0].elevatorDirection = "up";
+        Controller1.columns[2].elevators[1].elevatorFloor = 23;
+        Controller1.columns[2].elevators[1].elevatorDirection = "up";
+        Controller1.columns[2].elevators[2].elevatorFloor = 33;
+        Controller1.columns[2].elevators[2].elevatorDirection = "down";
+        Controller1.columns[2].elevators[3].elevatorFloor = 40;
+        Controller1.columns[2].elevators[3].elevatorDirection = "down";
+        Controller1.columns[2].elevators[4].elevatorFloor = 39;
+        Controller1.columns[2].elevators[4].elevatorDirection = "down";
+        System.Console.WriteLine("SCENARIO 2");
+        Controller1.assignElevator(36);
+
         // *************** SCENE #3 ***************\\
-        // *************** SCENE #4 ***************\\
+        // Scenario 3:
+        // With fourth column (or column D) serving floors from 41 to 60,
+        // with elevator D1 at 58th floor going to 1st,
+        // D2 at 50th floor going to 60th,
+        // D3 at 46th floor going to 58th,
+        // D4 at 1st floor going to 54th,
+        // and D5 at 60th floor going to 1st,
+        // someone is at 54th floor and requests the 1st floor,
+        // elevator D1 is expected to pick him up
 
+        Controller1.columns[3].elevators[0].elevatorFloor = 58;
+        Controller1.columns[3].elevators[0].elevatorDirection = "down";
+        Controller1.columns[3].elevators[1].elevatorFloor = 50;
+        Controller1.columns[3].elevators[1].elevatorDirection = "up";
+        Controller1.columns[3].elevators[2].elevatorFloor = 46;
+        Controller1.columns[3].elevators[2].elevatorDirection = "up";
+        Controller1.columns[3].elevators[3].elevatorFloor = 1;
+        Controller1.columns[3].elevators[3].elevatorDirection = "up";
+        Controller1.columns[3].elevators[4].elevatorFloor = 60;
+        Controller1.columns[3].elevators[4].elevatorDirection = "down";
+        System.Console.WriteLine("SCENARIO 3");
+        Controller1.RequestElevator(54);
+
+        // *************** SCENE #4 ***************\\
+        // Scenario 4:
+        // With first column (or Column A) serving the basements B1 to B6,
+        // with elevator A1 idle at B4                    => floor -3 AND idle
+        // A2 idle at 1st floor,                          => floor 1 AND idle
+        // A3 at B3 and going to B5,                      => floor -2 AND down
+        // A4 at B6 and going to 1st floor,               => floor -5 AND up
+        // and A5 at B1 going to B6,                      => floor 0 AND down
+        // someone is at B3 and requests the 1st floor    => floor -2 AND up
+        // Elevator A4 is expected to be sent
+
+        // *************** SCENE #4 INFORMATION ***************\\
+        // *************** Basement floor are : ***************
+        // *************** -5 for basement B6   ***************
+        // *************** -4 for Basement B5   ***************
+        // *************** -3 for Basement B4   ***************
+        // *************** -2 for Basement B3   ***************
+        // *************** -1 for Basment B2    ***************
+        // *************** 0 for Basement B1    ***************
+        // *************** SCENE #4 INFORMATION ***************\\
+
+
+        Controller1.columns[0].elevators[0].elevatorFloor = -3;
+        Controller1.columns[0].elevators[0].elevatorDirection = "idle";
+        Controller1.columns[0].elevators[1].elevatorFloor = 1;
+        Controller1.columns[0].elevators[1].elevatorDirection = "idle";
+        Controller1.columns[0].elevators[2].elevatorFloor = -2;
+        Controller1.columns[0].elevators[2].elevatorDirection = "down";
+        Controller1.columns[0].elevators[3].elevatorFloor = -5;
+        Controller1.columns[0].elevators[3].elevatorDirection = "up";
+        Controller1.columns[0].elevators[4].elevatorFloor = 0;
+        Controller1.columns[0].elevators[4].elevatorDirection = "down";
+        System.Console.WriteLine("SCENARIO 4");
+        Controller1.RequestElevator(-2);
       }
     }
   }
