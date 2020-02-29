@@ -156,7 +156,7 @@ namespace Rocket_Elevators_Controllers
     }
 
 
-    // *************** Find the best elevator ***************\\
+    // *************** Find the best elevator *************** \\
     public Elevator findElevator(int requestedFloor)
     {
       int bestScore = 9999;
@@ -176,9 +176,9 @@ namespace Rocket_Elevators_Controllers
       foreach (Elevator elevator in this.elevators)
       {
 
-        // *************** User is on the RC floor ***************\\
+        // *************** User is on the RC floor *************** \\
 
-        // *************** The elevator is on the same floor as the user ***************\\
+        // *************** The elevator is on the same floor as the user *************** \\
 
         if (userFloor == 1 && elevator.elevatorFloor == userFloor && elevator.elevatorDirection == "up")
         {
