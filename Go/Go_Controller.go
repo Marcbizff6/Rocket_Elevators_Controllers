@@ -2,20 +2,17 @@ package main
 
 // package Go
 
-import (
-	"fmt"
-	// "math"
-	// "sort"
-)
+// "math"
+// "sort"
 
-//                                      *****STRUCTURES*****
+// *************** STRUCTURES ***************
 type controller struct {
-	id         int
-	nbColumn   int
-	columnList []column
+	id             int
+	numberOfColumn int
+	columnList     []column
 }
 type column struct {
-	id            int
+	id            string
 	nbElevator    int
 	totalFloor    int
 	totalBasement int
@@ -35,19 +32,30 @@ type floors struct {
 	floorDirection string
 }
 
-func calc(x, y int) (out1, out2 int) {
-	out1 = x + y
-	out2 = x - y
-	return
-}
+func newController(nbElevator, totalFloor, numberOfColumn, totalBasement int) *controller {
+	controller1 := controller{}
+	controller1.numberOfColumn = numberOfColumn
+	elevatorsPerColumn := nbElevator / numberOfColumn
+	floorsPerColumn := totalFloor / (numberOfColumn - 1)
+
+	// *************** CREATING COLUMN ***************
+	for i := 1; i <= numberOfColumn; i++ {
+		columns1 := column{
+			id:           "Column# " + string(i),
+			elevatorList: []elevator{},
+			floorList:    []int{}}
+
+		{
+			return
+		}
+	}
 
 func main() {
-	fmt.Println("Hello World")
 
-	num1 := 5
-	num2 := 4
+	// var elevatorNumbersTotal = 20
+	// var numberFloorsTotal = 60
+	// var numberOfBasement = 6
+	// var numberColumn = 4
 
-	result1, result2 := calc(num1, num2)
-	fmt.Println(result1, result2)
-
+	fmt.Println("hello worl")
 }
